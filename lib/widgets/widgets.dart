@@ -43,17 +43,71 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class MainButton extends StatelessWidget {
   var child;
+  Function funct;
 
-  MainButton({@required this.child});
+  MainButton({@required this.child, @required this.funct});
 
   @override
   Widget build(BuildContext context) {
     return RaisedButton(
-      onPressed: () {},
+      onPressed: funct,
       shape:
           RoundedRectangleBorder(borderRadius: new BorderRadius.circular(5.0)),
       child: child,
       color: themeLight.buttonColor,
     );
   }
+}
+
+class MyIcon extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Icon(
+      Icons.check_box_outline_blank_rounded,
+      size: 50,
+      color: themeLight.buttonColor,
+    );
+  }
+}
+
+class VisitsColumn extends StatelessWidget {
+  final int remainder;
+
+  VisitsColumn({@required this.remainder});
+
+  List<Widget> getCheckBoxColumn() {
+    List<Widget> list = List<Widget>();
+    /*for (int i = 0; i < 5 - remainder; i++) {
+      list.add(Expanded(
+        child: Icon(Icons.check_box_outline_blank_rounded),
+      ));
+    }*/
+    list.add(MyIcon());
+    list.add(MyIcon());
+    list.add(MyIcon());
+    list.add(MyIcon());
+    list.add(MyIcon());
+
+    return list;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: getCheckBoxColumn(),
+    );
+  }
+}
+
+Widget CostomTextField(TextEditingController controller, String hintText) {
+  return TextField(
+    controller: controller,
+    decoration: InputDecoration(
+      hintText: hintText,
+      border: OutlineInputBorder(),
+      fillColor: Colors.black45,
+      focusColor: Colors.black38,
+    ),
+    style: TextStyle(color: Colors.white, fontSize: 16),
+  );
 }
