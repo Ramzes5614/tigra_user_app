@@ -46,7 +46,7 @@ class _HomeSchreenState extends State<HomeSchreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child: Text("Общее количество: 23"),
+                          child: Text("Общее количество:\n23"),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
