@@ -14,7 +14,7 @@ void main() {
   runApp(MyApp());
 }
 
-final navigatorBloc = NavigationBloc();
+//final navigatorBloc = NavigationBloc();
 final authorisationBloc = UserAuthorisationBloc();
 
 class MyApp extends StatelessWidget {

@@ -11,7 +11,7 @@ class UserModel {
     name = data["first_name"];
     surname = data["last_name"];
     userPhoneNumber = data["phone_number"];
-    visits = data["visits_counter"];
+    visits = data["visit_counter"];
   }
   UserModel.example() {
     name = "Иван";

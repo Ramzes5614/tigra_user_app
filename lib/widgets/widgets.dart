@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tigra/blocs/user_auth_bloc.dart';
 import 'package:tigra/styles/theme.dart';
+import 'package:tigra/main.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;
@@ -20,6 +22,7 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
         Container(
           color: Colors.black,
           child: AppBar(
+            automaticallyImplyLeading: false,
             backgroundColor: themeLight.appBarTheme.color,
             title: Container(
               padding: EdgeInsets.all(5),
@@ -42,8 +45,8 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 class MainButton extends StatelessWidget {
-  var child;
-  Function funct;
+  final child;
+  final Function funct;
 
   MainButton({@required this.child, @required this.funct});
 

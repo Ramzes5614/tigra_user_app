@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:tigra/blocs/navigation_bloc.dart';
+import 'package:tigra/blocs/user_auth_bloc.dart';
 import 'package:tigra/main.dart';
+import 'package:tigra/responses/user_response.dart';
 import 'package:tigra/styles/theme.dart';
 import 'package:tigra/widgets/widgets.dart';
 
@@ -15,37 +17,42 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Center(
-          child: Container(
-            padding: EdgeInsets.fromLTRB(25, 150, 25, 50),
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 2,
-                  child: Text(
-                    "Вход",
-                    style: themeLight.textTheme.headline6,
-                  ),
-                ),
-                Expanded(
-                    flex: 1, child: CostomTextField(_loginController, "Логин")),
-                Expanded(
-                  flex: 1,
-                  child: CostomTextField(_passwordController, "Пороль"),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: MainButton(
+      body: WillPopScope(
+        onWillPop: () => authorisationBloc.pickState(UserUnAuth()),
+        child: SafeArea(
+          child: Center(
+            child: Container(
+              padding: EdgeInsets.fromLTRB(25, 150, 25, 50),
+              child: Column(
+                children: [
+                  Expanded(
+                    flex: 2,
                     child: Text(
-                      "Войти",
-                      style: themeLight.textTheme.headline2,
+                      "Вход",
+                      style: themeLight.textTheme.headline6,
                     ),
-                    funct: () => authorisationBloc
-                      ..logIn(_loginController.text, _passwordController.text),
                   ),
-                )
-              ],
+                  Expanded(
+                      flex: 1,
+                      child: CostomTextField(_loginController, "Логин")),
+                  Expanded(
+                    flex: 1,
+                    child: CostomTextField(_passwordController, "Пороль"),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: MainButton(
+                      child: Text(
+                        "Войти",
+                        style: themeLight.textTheme.headline2,
+                      ),
+                      funct: () => authorisationBloc
+                        ..logIn(
+                            _loginController.text, _passwordController.text),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

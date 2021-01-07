@@ -2,11 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:tigra/blocs/navigation_bloc.dart';
 import 'package:tigra/main.dart';
+import 'package:tigra/models/user_model.dart';
+import 'package:tigra/screens/home_screen.dart';
 import 'package:tigra/styles/constants.dart';
+import 'package:tigra/styles/theme.dart';
 import 'package:tigra/widgets/qr_code_widget.dart';
 import 'package:tigra/widgets/widgets.dart';
 
 class QrCodeScreen extends StatefulWidget {
+  final UserModel user;
+  QrCodeScreen({this.user});
   @override
   _QrCodeScreenState createState() => _QrCodeScreenState();
 }
@@ -26,12 +31,14 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
     return Scaffold(
         appBar: MainAppBar(
           text: Text(
-            "Иванов Иван",
+            "${widget.user.surname} ${widget.user.name}",
             style: kSurnameTextStyle,
           ),
           button: TextButton(
-            onPressed: () =>
-                navigatorBloc.pickNavigator(NavigatorMenu.HomePage),
+            onPressed: () => Navigator.pop(context),
+            /*Navigator.push(context,
+                MaterialPageRoute(builder: (context) => HomeSchreen())),*/
+            /*navigatorBloc.pickNavigator(NavigatorMenu.HomePage),*/
             child: Text(
               "Назад",
               style: kButtonTextStyle,
@@ -56,6 +63,10 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     Expanded(
+                      child: Text(widget.user.userPhoneNumber,
+                          style: themeLight.textTheme.headline5),
+                    )
+                    /*Expanded(
                       child: TextField(
                         controller: _textController,
                         decoration: InputDecoration(
@@ -63,8 +74,8 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                           errorText: _inputErrorText,
                         ),
                       ),
-                    ),
-                    Padding(
+                    ),*/
+                    /*Padding(
                       padding: const EdgeInsets.only(left: 10.0),
                       child: FlatButton(
                         child: Text("Сгенерировать"),
@@ -75,7 +86,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                           });
                         },
                       ),
-                    )
+                    )*/
                   ],
                 ),
               ),
@@ -86,7 +97,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                 child: RepaintBoundary(
                   key: globalKey,
                   child: QrImage(
-                    data: _dataString,
+                    data: widget.user.userPhoneNumber,
                     size: 0.5 * bodyHeight,
                     errorStateBuilder: (context, err) {
                       return Container(

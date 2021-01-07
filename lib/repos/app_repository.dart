@@ -29,13 +29,12 @@ class AppRepository {
           prefs.setString("phone_number", login);
           prefs.setString("password", password);
           print("Вход осуществлен");
-          return UserResponse.fromJson(data);
+          return UserLoggedIn(data["profile"]);
         } else {
-          return UserResponse.withError("Пользователь не найден");
+          return UserUnAuth();
         }
       } else {
-        return UserResponse.withError(
-            "Произошла ошибка при подключении к серверу");
+        return UserUnAuth();
       }
     } catch (error, stck) {
       print("$error $stck");
@@ -55,13 +54,19 @@ class AppRepository {
           firstName != null &&
           lastName != null &&
           visitsCount != null) {
-        return UserResponse.fromLocal(firstName, lastName, login, visitsCount);
+        var data = {
+          "first_name": firstName,
+          "last_name": lastName,
+          "phone_number": login,
+          "visits_counter": visitsCount
+        };
+        return UserLoggedIn(data);
       } else {
-        return UserResponse.withError("Пользователь не найден");
+        return UserUnAuth();
       }
     } catch (error, stacktrase) {
       print("$error  $stacktrase");
-      return UserResponse.withError("Ошибка");
+      return UserUnAuth();
     }
   }
 
@@ -69,9 +74,10 @@ class AppRepository {
   Future<UserResponse> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("phone_number");
-    prefs.getString("first_name");
-    prefs.getString("last_name");
-    prefs.getInt("visits_counter");
-    prefs.getInt("password");
+    prefs.remove("first_name");
+    prefs.remove("last_name");
+    prefs.remove("visits_counter");
+    prefs.remove("password");
+    return UserUnAuth();
   }
 }

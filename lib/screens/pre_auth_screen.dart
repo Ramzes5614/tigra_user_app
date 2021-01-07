@@ -9,9 +9,10 @@ import 'package:tigra/main.dart';
 import 'package:tigra/responses/user_response.dart';
 import 'package:tigra/screens/authorisation_screen.dart';
 import 'package:tigra/screens/home_screen.dart';
+import 'package:tigra/screens/registration_screen.dart';
 import 'package:tigra/widgets/widgets.dart';
 
-class AuthCheckScreen extends StatefulWidget {
+/*class AuthCheckScreen extends StatefulWidget {
   @override
   _AuthCheckScreenState createState() => _AuthCheckScreenState();
 }
@@ -21,7 +22,6 @@ class _AuthCheckScreenState extends State<AuthCheckScreen> {
   Widget build(BuildContext context) {
     return StreamBuilder<UserStates>(
       stream: authorisationBloc.subject.stream,
-      initialData: UserStates.UNINITIALISED,
       builder: (context, AsyncSnapshot<UserStates> snapshot) {
         switch (snapshot.data) {
           case UserStates.AUTHORISED:
@@ -49,7 +49,7 @@ class _AuthCheckScreenState extends State<AuthCheckScreen> {
       },
     );
   }
-}
+}*/
 
 class PreAuthScreen extends StatelessWidget {
   const PreAuthScreen({
@@ -67,13 +67,16 @@ class PreAuthScreen extends StatelessWidget {
               Padding(
                 padding: EdgeInsets.all(15),
                 child: MainButton(
-                  child: Text(
-                    "Войти",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  funct: () =>
-                      authorisationBloc..pickState(UserStates.NONAUTHORISED),
-                ),
+                    child: Text(
+                      "Войти",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    funct: () =>
+                        /*Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AuthorisationScreen()))*/
+                        authorisationBloc..pickState(ToAuthScr())),
               ),
               Padding(
                 padding: EdgeInsets.all(15),
@@ -82,20 +85,25 @@ class PreAuthScreen extends StatelessWidget {
                     "Регистрация",
                     style: TextStyle(color: Colors.white),
                   ),
-                  funct: () =>
-                      navigatorBloc.pickNavigator(NavigatorMenu.Registration),
+                  funct: () => authorisationBloc..pickState(ToRegScr()),
+                  /*Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => RegistrationScreen()))
+                    navigatorBloc.pickNavigator(NavigatorMenu.Registration),*/
                 ),
               ),
               Padding(
                 padding: EdgeInsets.all(15),
                 child: MainButton(
-                  child: Text(
-                    "Помощь",
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  funct: () =>
-                      navigatorBloc.pickNavigator(NavigatorMenu.Authorisation),
-                ),
+                    child: Text(
+                      "Помощь",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                    funct:
+                        () {} ///////////////////////////////////////////////////////
+                    /*navigatorBloc.pickNavigator(NavigatorMenu.Authorisation),*/
+                    ),
               )
             ],
           ),
