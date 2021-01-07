@@ -99,15 +99,32 @@ class VisitsColumn extends StatelessWidget {
   }
 }
 
-Widget CostomTextField(TextEditingController controller, String hintText) {
-  return TextField(
-    controller: controller,
-    decoration: InputDecoration(
-      hintText: hintText,
-      border: OutlineInputBorder(),
-      fillColor: Colors.black45,
-      focusColor: Colors.black38,
-    ),
-    style: TextStyle(color: Colors.white, fontSize: 16),
-  );
+class CostomTextField extends StatefulWidget {
+  final TextEditingController controller;
+  final String hintText;
+  CostomTextField(this.controller, this.hintText);
+  @override
+  _CostomTextFieldState createState() => _CostomTextFieldState();
+}
+
+class _CostomTextFieldState extends State<CostomTextField> {
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: widget.controller,
+      decoration: InputDecoration(
+        filled: true,
+        fillColor: Colors.grey,
+        hintText: widget.hintText,
+        hintStyle: TextStyle(
+          color: Colors.white,
+        ),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.all(Radius.circular(2.5)),
+          borderSide: BorderSide.none,
+        ),
+      ),
+      style: TextStyle(color: Colors.white, fontSize: 16),
+    );
+  }
 }

@@ -13,4 +13,6 @@ const TextStyle kButtonTextStyle = TextStyle(
 );
 
 const InputDecoration kInputDecoration = InputDecoration(
-    helperStyle: TextStyle(color: Colors.white), fillColor: Color(0xFF313131));
+  helperStyle: TextStyle(color: Colors.white),
+  fillColor: Color(0xFF313131),
+);

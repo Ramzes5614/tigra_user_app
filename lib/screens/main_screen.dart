@@ -14,6 +14,12 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   @override
+  void initState() {
+    authorisationBloc.logInWithLocal();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: navigatorBloc.itemStream,
@@ -21,7 +27,7 @@ class _MainScreenState extends State<MainScreen> {
       builder: (context, AsyncSnapshot<NavigatorMenu> snapshot) {
         switch (snapshot.data) {
           case NavigatorMenu.AuthCheck:
-            return PreAuthScreen();
+            return AuthCheckScreen();
             break;
           case NavigatorMenu.Authorisation:
             return AuthorisationScreen();

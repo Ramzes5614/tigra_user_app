@@ -21,8 +21,7 @@ class _HomeSchreenState extends State<HomeSchreen> {
             style: kSurnameTextStyle,
           ),
           button: TextButton(
-            onPressed: () =>
-                navigatorBloc.pickNavigator(NavigatorMenu.AuthCheck),
+            onPressed: () => authorisationBloc.logOut(),
             child: Text(
               "Выйти",
               style: kButtonTextStyle,

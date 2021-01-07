@@ -5,11 +5,12 @@ class UserResponse {
   final String error;
 
   UserResponse.fromJson(var data)
-      : user = UserModel.fromJson(),
+      : user = UserModel.fromJson(data),
         error = "";
 
-  UserResponse.example()
-      : user = UserModel.fromJson(),
+  UserResponse.fromLocal(
+      String firtName, String lastName, String phoneNumber, int visits)
+      : user = UserModel.fromLocal(firtName, lastName, phoneNumber, visits),
         error = "";
 
   UserResponse.withError(String err)

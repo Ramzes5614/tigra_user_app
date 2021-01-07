@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:tigra/blocs/navigation_bloc.dart';
+import 'package:tigra/blocs/user_auth_bloc.dart';
 import 'package:tigra/screens/authorisation_screen.dart';
 import 'package:tigra/screens/home_screen.dart';
 import 'package:tigra/screens/main_screen.dart';
@@ -14,6 +15,7 @@ void main() {
 }
 
 final navigatorBloc = NavigationBloc();
+final authorisationBloc = UserAuthorisationBloc();
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
