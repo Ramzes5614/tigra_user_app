@@ -1,14 +1,8 @@
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
+import 'package:tigra/models/log_and_pas.dart';
 import 'package:tigra/repos/app_repository.dart';
 import 'package:tigra/responses/user_response.dart';
-
-enum UserStates {
-  AUTHORISED,
-  NONAUTHORISED,
-  UNINITIALISED,
-  AUTHORISATIONSCREEN
-}
 
 class UserAuthorisationBloc {
   final AppRepository repository = AppRepository();
@@ -19,15 +13,32 @@ class UserAuthorisationBloc {
     logInWithLocal();
   }*/
 
-  logIn(String login, String password) async {
+  logIn(LoginAndPass user) async {
+    print("Отправляем запрос: ${user.login} : ${user.password}");
     _controller.sink.add(UserLoading());
-    UserResponse response = await repository.authorisation(login, password);
+    UserResponse response =
+        await repository.authorisation(user.login, user.password);
     /*if (response.user != null) {
       _controller..sink.add(UserStates.AUTHORISED);
     } else {
       _controller..sink.add(UserStates.NONAUTHORISED);
     }
     this.userResponse = response;*/
+    print(response);
+    _controller..sink.add(response);
+  }
+
+  updateUserState(String phoneNumber) async {
+    //print("Отправляем запрос: ${user.login} : ${user.password}");
+    _controller.sink.add(UserLoading());
+    UserResponse response = await repository.updateUserState(phoneNumber);
+    /*if (response.user != null) {
+      _controller..sink.add(UserStates.AUTHORISED);
+    } else {
+      _controller..sink.add(UserStates.NONAUTHORISED);
+    }
+    this.userResponse = response;*/
+    print(response);
     _controller..sink.add(response);
   }
 

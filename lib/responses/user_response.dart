@@ -50,3 +50,19 @@ class ToRegScr extends UserResponse {
 class UserLoading extends UserResponse {
   UserLoading() : super(null);
 }
+
+class UserAuthFailed extends UserResponse {
+  UserAuthFailed() : super(null);
+}
+
+class UserWithError extends UserResponse {
+  UserWithError(String err) : super.withError(err);
+}
+
+class UserToQrScreen extends UserLoggedIn {
+  UserToQrScreen(var data) : super(data);
+}
+
+class UserToHelp extends UserResponse {
+  UserToHelp() : super(null);
+}

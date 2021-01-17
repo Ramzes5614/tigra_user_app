@@ -1,19 +1,11 @@
-/*import 'dart:async';
+import 'dart:async';
 
-import 'package:flutter/material.dart';
-
-enum NavigatorMenu {
-  AuthCheck,
-  Authorisation,
-  Registration,
-  HomePage,
-  QrScreen
-}
+enum NavigatorMenu { LOGO, AUTHORISATION, REGISTRATION, HOME, QRSCREEN }
 
 class NavigationBloc {
   final StreamController<NavigatorMenu> _streamController =
       StreamController<NavigatorMenu>.broadcast();
-  NavigatorMenu defaultItem = NavigatorMenu.AuthCheck;
+  NavigatorMenu defaultItem = NavigatorMenu.LOGO;
 
   Stream<NavigatorMenu> get itemStream => _streamController.stream;
 
@@ -37,4 +29,3 @@ class NavigationBloc {
     _streamController?.close();
   }
 }
-*/

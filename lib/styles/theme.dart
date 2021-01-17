@@ -1,60 +1,119 @@
 import 'package:flutter/material.dart';
 
 ThemeData themeLight = ThemeData(
-  //primarySwatch: Colors.blue,
-  visualDensity: VisualDensity.adaptivePlatformDensity,
-  disabledColor: Colors.amber,
-  appBarTheme: AppBarTheme(color: Color(0xFF313131), shadowColor: Colors.white),
-  //brightness: Brightness.light,
-  //primarySwatch: Color(0xFF3985c0),
-  primaryIconTheme: IconThemeData(
-    color: Color(0xFF3985c0),
-  ),
-  primaryTextTheme: TextTheme(
-    headline6: TextStyle(color: Color(0xFF3985c0)),
-  ),
-  accentColor: Color(0xFF3985c0),
-  cardColor: Color(0xFFffffff),
-  primaryColor: Color(0xFFffffff),
-  scaffoldBackgroundColor: Color(0xFFFFFFFF),
-  canvasColor: Color(0xFFffffff),
-  buttonColor: Color(0xFF313131),
-  bottomNavigationBarTheme: BottomNavigationBarThemeData(
-    unselectedItemColor: Color(0xFF77818d),
-    selectedItemColor: Color(0xFF3985c0),
-    backgroundColor: Color(0xFFedeef0),
-  ),
-  textTheme: TextTheme(
-    subtitle1: TextStyle(
-      color: Color(0xFF3985c0),
-      fontSize: 12,
-      fontFamily: 'OpenSans',
-    ),
-    headline1: TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.w400,
-      fontSize: 18,
-      fontFamily: 'OpenSans',
-    ),
-    headline2: TextStyle(
-      fontSize: 16,
-      fontFamily: 'OpenSans',
-    ),
-    headline3: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w600,
-      color: Color(0xFF3985c0),
-    ),
-    headline4: TextStyle(
-      fontSize: 18,
-      fontWeight: FontWeight.w600,
-      color: Color(0xFF77818d),
-    ),
-    headline5: TextStyle(
-      fontSize: 22,
-      color: Color(0xFF313131),
-      fontWeight: FontWeight.bold,
-      fontFamily: 'OpenSans',
-    ),
-  ),
-);
+    backgroundColor: Color(0xFFE5E5E5),
+    appBarTheme: AppBarTheme(color: Color(0xFF171717)));
+
+const kBottomColorOrange = Color(0xFFFF8B20);
+const kBottomColorWhite = Color(0xFFFFFFFF);
+const kBoxBlackColor = Color(0xFF171717);
+const kGreenCircleColor = Color(0xFF2ABE30);
+const kOrangeCircleColor = Color(0xFFFF8B20);
+
+const String assetName = 'assets/images/tiger.svg';
+
+const kConfirmTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 16,
+    color: Color(0xFF171717),
+    fontWeight: FontWeight.normal);
+const kCircleTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 18,
+    color: Color(0xFFFFFFFF),
+    fontWeight: FontWeight.normal);
+const kBottomTextStyleOrange = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 18,
+    color: Color(0xFFFF8B20),
+    fontWeight: FontWeight.bold);
+const kBottomTextStyleWhite = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 18,
+    color: Color(0xFFFFFFFF),
+    fontWeight: FontWeight.bold);
+const kHelpBottomTextStyleBlack = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 18,
+    color: Color(0xFF171717),
+    fontWeight: FontWeight.bold);
+const kTitleTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 36,
+    color: Color(0xFF171717),
+    fontWeight: FontWeight.normal);
+const kHintTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 36,
+    color: Color(0xFF171717),
+    fontWeight: FontWeight.normal);
+const kErrorTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 15,
+    color: Color(0xFFFF8B20),
+    fontWeight: FontWeight.normal);
+const kNameTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 26,
+    color: Color(0xFF171717),
+    fontWeight: FontWeight.normal);
+const kSurnameTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 18,
+    color: Color(0xFF171717),
+    fontWeight: FontWeight.normal);
+const kSurnameTextStyleWhite = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 18,
+    color: Color(0xFFFFFFFF),
+    fontWeight: FontWeight.normal);
+const kVisitsNumberTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 144,
+    color: Color(0xFFFF8B20),
+    fontWeight: FontWeight.normal);
+const kVisitsTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 18,
+    color: Color(0xFFFF8B20),
+    fontWeight: FontWeight.normal);
+BoxDecoration kOrangeBoxDecorationOrangeBorder = BoxDecoration(
+    color: Color(0xFFFF8B20),
+    borderRadius: BorderRadius.circular(6),
+    border: Border.all(
+      color: Color(0xFFFF8B20),
+      width: 3.0,
+    ));
+BoxDecoration kWhiteBoxDecorationOrangeBorder = BoxDecoration(
+    color: Color(0xFFFFFFFF),
+    borderRadius: BorderRadius.circular(6),
+    border: Border.all(
+      color: Color(0xFFFF8B20),
+      width: 3.0,
+    ));
+BoxDecoration kWhiteBoxDecorationBlackBorder = BoxDecoration(
+    color: Color(0xFFFFFFFF),
+    borderRadius: BorderRadius.circular(6),
+    border: Border.all(
+      color: Color(0xFF171717),
+      width: 3.0,
+    ));
+BoxDecoration kCircleDecoration = BoxDecoration(shape: BoxShape.circle);
+BoxDecoration kAppBarBottomBoxDecoration = BoxDecoration(
+    color: Color(0xFFFFFFFF),
+    borderRadius: BorderRadius.circular(6),
+    border: Border.all(
+      color: Color(0xFFFFFFFF),
+      width: 3.0,
+    ));
+
+const String helperText =
+    "Если вы уверены в правильности набранного пароля и номера телефона при входе, либо возникли сложности при регистрации, вы можете связаться с администрацией в ближайшем ИЦ либо через:";
+const String helperTextContacts =
+    "mail@tigra-kzn.ru +7 843 249 59 62 +7 927 249 59 62";
+
+const kHelperContactsTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 18,
+    color: kBoxBlackColor,
+    fontWeight: FontWeight.bold);

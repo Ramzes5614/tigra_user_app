@@ -6,8 +6,11 @@ import 'package:tigra/elements/transparent_loading.dart';
 import 'package:tigra/main.dart';
 import 'package:tigra/responses/user_response.dart';
 import 'package:tigra/screens/authorisation_screen.dart';
+import 'package:tigra/screens/help_screen.dart';
 import 'package:tigra/screens/home_screen.dart';
+import 'package:tigra/screens/logo_screen.dart';
 import 'package:tigra/screens/pre_auth_screen.dart';
+import 'package:tigra/screens/qr_code_screen.dart';
 import 'package:tigra/screens/registration_screen.dart';
 
 class MainScreen extends StatefulWidget {
@@ -38,8 +41,16 @@ class _MainScreenState extends State<MainScreen> {
             return RegistrationScreen();
           } else if (snapshot.data is UserLoading) {
             return TransparentLoader();
+          } else if (snapshot.data is UserUnAuth) {
+            return LogoScreen();
+          } else if (snapshot.data is UserAuthFailed) {
+            return AuthorisationScreen();
+          } else if (snapshot.data is UserToQrScreen) {
+            return QrCodeScreen();
+          } else if (snapshot.data is UserToHelp) {
+            return HelpScreen();
           } else {
-            return PreAuthScreen();
+            return LogoScreen();
           }
         } else {
           authorisationBloc.logInWithLocal();

@@ -1,9 +1,7 @@
 class Visits {
-  int visitsCount;
+  final int visitsCount;
 
   Visits({this.visitsCount});
 
-  Visits.example() {
-    visitsCount = 3;
-  }
+  Visits.example() : visitsCount = 3;
 }

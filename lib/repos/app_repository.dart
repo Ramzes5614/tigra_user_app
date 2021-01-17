@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tigra/elements/methods.dart';
+import 'package:tigra/models/user_model.dart';
 import 'package:tigra/responses/user_response.dart';
 import 'package:dio/dio.dart';
 
@@ -31,14 +33,14 @@ class AppRepository {
           print("Вход осуществлен");
           return UserLoggedIn(data["profile"]);
         } else {
-          return UserUnAuth();
+          return UserAuthFailed();
         }
       } else {
-        return UserUnAuth();
+        return UserWithError("Ошибка сервера...");
       }
     } catch (error, stck) {
       print("$error $stck");
-      return UserResponse.withError("Ошибка $error");
+      return UserWithError("Ошибка $error");
     }
   }
 
@@ -79,5 +81,39 @@ class AppRepository {
     prefs.remove("visits_counter");
     prefs.remove("password");
     return UserUnAuth();
+  }
+
+  /*Обновление данных*/
+  Future<UserResponse> updateUserState(String phoneNumber) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      /*String basicAuth = 'Basic ' +
+          base64.encode(utf8.encode("${user.userPhoneNumber}:${user.}"));
+      print(basicAuth);*/
+      String newStr = convertToSimplePhoneNumber(phoneNumber);
+      var response = await _dio.get(
+        "https://kids-project-pro.herokuapp.com/account/visits/",
+        //data: {"phone_number": phoneNumber},
+        queryParameters: {"phone_number": newStr},
+      );
+      print(response);
+      var jdata = jsonEncode(response.data);
+      var data = jsonDecode(jdata);
+      print(response);
+      if (data != null) {
+        //prefs.setString("first_name", data["profile"]["first_name"]);
+        //prefs.setString("last_name", data["profile"]["last_name"]);
+        prefs.setInt("visits_counter", data["profile"]["visits"]);
+        //prefs.setString("phone_number", login);
+        //prefs.setString("password", password);
+        print("Вход осуществлен");
+        return UserLoggedIn(data["profile"]);
+      } else {
+        return UserWithError("Ошибка сервера...");
+      }
+    } catch (error, stck) {
+      print("$error $stck");
+      return UserWithError("Ошибка $error");
+    }
   }
 }
