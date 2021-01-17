@@ -22,3 +22,17 @@ class LoaderSpinkit extends StatelessWidget {
     );
   }
 }
+
+loadingSpinkit() {
+  return Container(
+    alignment: Alignment.center,
+    child: SizedBox(
+      height: 50.0,
+      width: 50.0,
+      child: SpinKitDoubleBounce(
+        size: 50,
+        color: Colors.grey,
+      ),
+    ),
+  );
+}

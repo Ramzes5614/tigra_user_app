@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tigra/blocs/recovary_bloc.dart';
 import 'package:tigra/elements/methods.dart';
 import 'package:tigra/models/user_model.dart';
+import 'package:tigra/responses/recovery_response.dart';
 import 'package:tigra/responses/user_response.dart';
 import 'package:dio/dio.dart';
 
@@ -92,14 +94,12 @@ class AppRepository {
       print(basicAuth);*/
       String newStr = convertToSimplePhoneNumber(phoneNumber);
       var response = await _dio.get(
-        "https://kids-project-pro.herokuapp.com/account/visits/",
-        //data: {"phone_number": phoneNumber},
-        queryParameters: {"phone_number": newStr},
+        "https://kids-project-pro.herokuapp.com/account/visits/$newStr",
       );
-      print(response);
+      print(response.data);
       var jdata = jsonEncode(response.data);
       var data = jsonDecode(jdata);
-      print(response);
+      print(jdata);
       if (data != null) {
         //prefs.setString("first_name", data["profile"]["first_name"]);
         //prefs.setString("last_name", data["profile"]["last_name"]);
@@ -115,5 +115,14 @@ class AppRepository {
       print("$error $stck");
       return UserWithError("Ошибка $error");
     }
+  }
+
+  Future<RecoveryResponseOk> codeCheck() {
+    return Future.delayed(Duration(seconds: 1), () => RecoveryResponseOk());
+  }
+
+  Future<RecoveryResponseCodeSended> sendCode() {
+    return Future.delayed(
+        Duration(seconds: 1), () => RecoveryResponseCodeSended());
   }
 }

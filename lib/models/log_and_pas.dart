@@ -3,10 +3,13 @@ import 'dart:convert';
 class LoginAndPass {
   String login;
   String password;
+
   LoginAndPass({
     this.login,
     this.password,
   });
+
+  LoginAndPass.withError();
 
   LoginAndPass copyWith({
     String login,
