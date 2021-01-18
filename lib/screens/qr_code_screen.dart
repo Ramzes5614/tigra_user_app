@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
+import 'package:tigra/elements/methods.dart';
 import 'package:tigra/main.dart';
 import 'package:tigra/models/user_model.dart';
 import 'package:tigra/styles/theme.dart';
@@ -159,7 +160,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
               child: RepaintBoundary(
                 key: globalKey,
                 child: QrImage(
-                  data: widget.user.userPhoneNumber,
+                  data: convertToSimplePhoneNumber(widget.user.userPhoneNumber),
                   size: 0.5 * bodyHeight,
                   errorStateBuilder: (context, err) {
                     return Container(

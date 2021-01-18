@@ -6,6 +6,7 @@ String convertToSimplePhoneNumber(String inputString) {
   newStr = newStr.replaceAll('(', '');
   newStr = newStr.replaceAll(')', '');
   newStr = newStr.replaceAll(' ', '');
+  newStr = newStr.replaceAll('-', '');
   print(newStr);
   return newStr;
 }

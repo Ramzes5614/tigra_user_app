@@ -1,8 +1,14 @@
 class UserModel {
   String name;
   String surname;
+  String middlename;
   String userPhoneNumber;
+  String password;
   int visits;
+
+  UserModel(this.surname, this.name, this.middlename, this.userPhoneNumber,
+      this.password)
+      : visits = 0;
 
   UserModel.fromLocal(
       this.name, this.surname, this.userPhoneNumber, this.visits);

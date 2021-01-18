@@ -12,7 +12,6 @@ class AuthorisationScreen extends StatefulWidget {
 }
 
 class _AuthorisationScreenState extends State<AuthorisationScreen> {
-  final formKey = GlobalKey<FormState>();
   //final passKey = GlobalKey<FormState>();
   LoginAndPass userLP = LoginAndPass();
   var maskFormatter = new MaskTextInputFormatter(
@@ -38,11 +37,11 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
                     "Вход",
                     style: kTitleTextStyle,
                   ),
-                  Form(
-                    key: formKey,
-                    child: Column(
-                      children: [
-                        Container(
+                  Column(
+                    children: [
+                      Form(
+                        key: keys.formLoginKeys[0],
+                        child: Container(
                           height: 41,
                           width: 240,
                           child: TextFormField(
@@ -61,10 +60,13 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
                             decoration: inputDecor("Номер телефона"),
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Container(
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Form(
+                        key: keys.formLoginKeys[1],
+                        child: Container(
                           height: 41,
                           width: 240,
                           child: TextFormField(
@@ -88,17 +90,17 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
                             obscuringCharacter: '*',
                           ),
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              authorisationBloc.pickState(UserToHelp());
-                            },
-                            child: Text("Помощь",
-                                style: kHelpBottomTextStyleBlack)),
-                      ],
-                    ),
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            authorisationBloc.pickState(UserToHelp());
+                          },
+                          child:
+                              Text("Помощь", style: kHelpBottomTextStyleBlack)),
+                    ],
                   ),
                   Container(
                     height: 41,
@@ -141,7 +143,8 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
   }
 
   _submit() {
-    if (formKey.currentState.validate()) {
+    if (keys.formLoginKeys[0].currentState.validate() &&
+        keys.formLoginKeys[1].currentState.validate()) {
       userLP.login = convertToSimplePhoneNumber(_loginController.text);
       userLP.password = _passwordController.text;
       authorisationBloc.logIn(userLP);

@@ -4,12 +4,16 @@ import 'package:tigra/screens/authorisation_screen.dart';
 import 'package:tigra/styles/theme.dart';
 
 class PassChangeContainer extends StatefulWidget {
+  final TextEditingController _firstPassController;
+  final TextEditingController _secondPassController;
+  Key key;
+  PassChangeContainer(
+      this.key, this._firstPassController, this._secondPassController);
   @override
   _PassChangeContainer createState() => _PassChangeContainer();
 }
 
 class _PassChangeContainer extends State<PassChangeContainer> {
-  TextEditingController _loginController = TextEditingController();
   //var maskFormatter = new MaskTextInputFormatter(
   // mask: '+# (###) ###-##-##', filter: {"#": RegExp(r'[0-9]')});
   @override
@@ -33,41 +37,59 @@ class _PassChangeContainer extends State<PassChangeContainer> {
           SizedBox(
             height: 20,
           ),
-          Container(
-            height: 41,
-            width: 240,
-            child: TextFormField(
-              //initialValue: "+79033064659",
-              controller: _loginController,
-              validator: (str) {
-                if (str.length == 0) {
-                  return "Введите новый пароль";
-                } else {
-                  return null;
-                }
-              },
-              //inputFormatters: [maskFormatter],
-              decoration: inputDecor("Новый пароль"),
+          Form(
+            key: keys.formLoginKeys[2],
+            child: Container(
+              height: 41,
+              width: 240,
+              child: TextFormField(
+                //initialValue: "+79033064659",
+                controller: widget._firstPassController,
+                validator: (str) {
+                  if (str.length < 6) {
+                    return "Пароль слишком короткий";
+                  } else if (!str.contains(new RegExp(r'[0-9]'))) {
+                    return "Пороль должен содержать хотя-бы одну цифру";
+                  } else if (!str.contains(new RegExp(r'[a-x]'))) {
+                    return "Пароль должен содержать хотя-бы одну букву латинского алфавита";
+                  } else if (str.length > 32) {
+                    return "Пароль слишком длинный";
+                  } else {
+                    return null;
+                  }
+                },
+                //inputFormatters: [maskFormatter],
+                decoration: inputDecor("Новый пароль"),
+              ),
             ),
           ),
           SizedBox(
             height: 10,
           ),
-          Container(
-            height: 41,
-            width: 240,
-            child: TextFormField(
-              //initialValue: "+79033064659",
-              controller: _loginController,
-              validator: (str) {
-                if (str.length == 0) {
-                  return "Введите новый пароль";
-                } else {
-                  return null;
-                }
-              },
-              //inputFormatters: [maskFormatter],
-              decoration: inputDecor("Подтвердите пароль"),
+          Form(
+            key: keys.formLoginKeys[3],
+            child: Container(
+              height: 41,
+              width: 240,
+              child: TextFormField(
+                //initialValue: "+79033064659",
+                controller: widget._secondPassController,
+                validator: (str) {
+                  if (str.length < 6) {
+                    return "Пароль слишком короткий";
+                  } else if (!str.contains(new RegExp(r'[0-9]'))) {
+                    return "Пороль должен содержать хотя-бы одну цифру";
+                  } else if (!str.contains(new RegExp(r'[a-x]'))) {
+                    return "Пароль должен содержать хотя-бы одну букву латинского алфавита";
+                  } else if (str.length > 32) {
+                    return "Пароль слишком длинный";
+                  } else {
+                    return null;
+                  }
+                },
+                //inputFormatters: [maskFormatter],
+                decoration: inputDecor("Подтвердите пароль"),
+              ),
             ),
           ),
         ],

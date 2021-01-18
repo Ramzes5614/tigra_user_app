@@ -122,3 +122,23 @@ const kHelperContactsTextStyle = TextStyle(
     fontSize: 18,
     color: kBoxBlackColor,
     fontWeight: FontWeight.bold);
+
+class AppKeys {
+  List<GlobalKey<FormState>> formLoginKeys = [
+    GlobalKey<FormState>(), //0 - авторизация - логин
+    GlobalKey<FormState>(), //1 - авторизация - пароль
+    /*********************************************/
+    GlobalKey<FormState>(), //2 - изменение пароля - 1
+    GlobalKey<FormState>(), //3 - изменение пароля - 2
+    /*********************************************/
+    GlobalKey<FormState>(), //4 - регистрация - фамилия
+    GlobalKey<FormState>(), //5 - регистрация - имя
+    GlobalKey<FormState>(), //6 - регистрация - отчество
+    GlobalKey<FormState>(), //7 - регистрация - телефон
+    GlobalKey<FormState>(), //8 - регистрация - пароль
+    GlobalKey<FormState>() //9 - ввод кода
+  ];
+  //final GlobalKey<FormFieldState> txtEmailKey = GlobalKey<FormFieldState>();
+}
+
+AppKeys keys = AppKeys();

@@ -16,22 +16,39 @@ class RecoveryBloc {
 
   RecoveryResponse get defaultItem => RecoveryResponseToPhoneEnter();
 
-  codeCheck(String code) async {
+  codeCheck(String pgone, String code) async {
     _controller.sink.add(RecoveryResponseCodeChecking());
-    RecoveryResponse response = await _repository.codeCheck();
+    RecoveryResponse response = await _repository.codeCheck(pgone, code);
     _controller.sink.add(response);
-    _lastResponse = response;
+    if (!(response is RecoveryResponseServerError)) {
+      _lastResponse = response;
+    }
   }
 
   sendCode(String phoneNumber) async {
-    RecoveryResponse response = await _repository.sendCode();
+    _controller.sink.add(RecoveryResponseCodeChecking());
+    RecoveryResponse response = await _repository.sendCode(phoneNumber);
     _controller.sink.add(response);
-    _lastResponse = response;
+    if (!(response is RecoveryResponseServerError)) {
+      _lastResponse = response;
+    }
+  }
+
+  changePass(String phoneNumber, String pass) async {
+    _controller.sink.add(RecoveryResponseCodeChecking());
+    RecoveryResponse response =
+        await _repository.changePassword(phoneNumber, pass);
+    _controller.sink.add(response);
+    if (!(response is RecoveryResponseServerError)) {
+      _lastResponse = response;
+    }
   }
 
   pickState(RecoveryResponse response) {
     _controller.sink.add(response);
-    _lastResponse = response;
+    if (!(response is RecoveryResponseServerError)) {
+      _lastResponse = response;
+    }
   }
 
   dispose() {

@@ -28,7 +28,7 @@ class UserAuthorisationBloc {
     _controller..sink.add(response);
   }
 
-  updateUserState(String phoneNumber) async {
+  /*updateUserState(String phoneNumber) async {
     //print("Отправляем запрос: ${user.login} : ${user.password}");
     _controller.sink.add(UserLoading());
     UserResponse response = await repository.updateUserState(phoneNumber);
@@ -40,7 +40,7 @@ class UserAuthorisationBloc {
     this.userResponse = response;*/
     print(response);
     _controller..sink.add(response);
-  }
+  }*/
 
   logInWithLocal() async {
     _controller.sink.add(UserLoading());

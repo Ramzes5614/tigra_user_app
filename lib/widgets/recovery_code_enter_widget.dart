@@ -6,8 +6,9 @@ import 'package:tigra/styles/theme.dart';
 import 'package:tigra/widgets/timer_widget.dart';
 
 class CodeEnterWidget extends StatefulWidget {
-  TextEditingController _codeController;
-  CodeEnterWidget(this._codeController);
+  final Key key;
+  final TextEditingController codeController;
+  CodeEnterWidget({this.codeController, this.key});
   @override
   _CodeEnterWidgetState createState() => _CodeEnterWidgetState();
 }
@@ -40,18 +41,21 @@ class _CodeEnterWidgetState extends State<CodeEnterWidget> {
           SizedBox(
             height: 15,
           ),
-          TextFormField(
-            //initialValue: "+79033064659",
-            controller: widget._codeController,
-            validator: (str) {
-              if (str.length == 0) {
-                return "Введите код";
-              } else {
-                return null;
-              }
-            },
-            //inputFormatters: [maskFormatter],
-            decoration: inputDecor("Код"),
+          Form(
+            key: widget.key,
+            child: TextFormField(
+              //initialValue: "+79033064659",
+              controller: widget.codeController,
+              validator: (str) {
+                if (str.length == 0) {
+                  return "Введите код";
+                } else {
+                  return null;
+                }
+              },
+              //inputFormatters: [maskFormatter],
+              decoration: inputDecor("Код"),
+            ),
           ),
           SizedBox(
             height: 15,

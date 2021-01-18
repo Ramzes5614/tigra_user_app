@@ -117,12 +117,147 @@ class AppRepository {
     }
   }
 
-  Future<RecoveryResponseOk> codeCheck() {
-    return Future.delayed(Duration(seconds: 1), () => RecoveryResponseOk());
+  /*Проверка кода */
+  Future<RecoveryResponse> codeCheck(String phoneNumber, String code) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      String newStr = convertToSimplePhoneNumber(phoneNumber);
+      var response = await _dio.post(
+          "https://kids-project-pro.herokuapp.com/verify/confirm_phone/$newStr",
+          data: FormData.fromMap({'otp': code}));
+      print(response);
+      var jdata = jsonEncode(response.data);
+      print(jdata);
+      if (response.statusCode != 200) {
+        return RecoveryResponseServerError("Связь с сервером потеряна");
+      }
+      if (jdata == '"Phone number found"') {
+        return RecoveryResponseOk();
+      } else {
+        return RecoveryResponseServerError("Код неверный");
+      }
+      /*if (data["Responded"]["success"] != false) {
+        print("");
+        return RecoveryResponseCodeSended();
+      } else {
+        return RecoveryResponseServerError(
+            data["Responded"]["message"]); /*"Ошибка сервера..."*/
+      }*/
+    } catch (error, stck) {
+      print("$error $stck");
+      return RecoveryResponseServerError(error.toString()); /*"Ошибка $error"*/
+    }
+    //return Future.delayed(Duration(seconds: 1), () => RecoveryResponseOk());
   }
 
-  Future<RecoveryResponseCodeSended> sendCode() {
-    return Future.delayed(
-        Duration(seconds: 1), () => RecoveryResponseCodeSended());
+  Future<bool> codeCheckBool(String phoneNumber, String code) async {
+    try {
+      String newStr = convertToSimplePhoneNumber(phoneNumber);
+      var response = await _dio.post(
+          "https://kids-project-pro.herokuapp.com/verify/confirm_phone/$newStr",
+          data: FormData.fromMap({'otp': code}));
+      print(response);
+      var jdata = jsonEncode(response.data);
+      print(jdata);
+      if (response.statusCode != 200) {
+        return false;
+      }
+      if (jdata == '"Phone number found"') {
+        return true;
+      } else {
+        return false;
+      }
+      /*if (data["Responded"]["success"] != false) {
+        print("");
+        return RecoveryResponseCodeSended();
+      } else {
+        return RecoveryResponseServerError(
+            data["Responded"]["message"]); /*"Ошибка сервера..."*/
+      }*/
+    } catch (error, stck) {
+      print("$error $stck");
+      return false;
+    }
+  }
+
+  Future<RecoveryResponse> sendCode(String phoneNumber) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    int count;
+    DateTime _time;
+    try {
+      _time = DateTime.parse(prefs.getString("last_time_send"));
+      count = prefs.getInt("count_send");
+    } catch (error) {
+      count = 0;
+    }
+    print("Последнее время отправки - $_time");
+    print("Кол-во - $count");
+    try {
+      String newStr = convertToSimplePhoneNumber(phoneNumber);
+      var response = await _dio.get(
+        "https://kids-project-pro.herokuapp.com/verify/confirm_phone/$newStr",
+      );
+      print(response);
+      var jdata = jsonEncode(response.data);
+      var data = jsonDecode(jdata);
+      print(jdata);
+      if (jdata == '"Phone number is not registered"') {
+        return RecoveryResponseServerError("Номер телефона не найден");
+      }
+      if (response.statusCode != 200) {
+        return RecoveryResponseServerError("Связь с сервером потеряна");
+      }
+      if (data["Responded"]["success"] != false) {
+        count++;
+        prefs.setString("otp", data["OTP"]);
+        prefs.setString("last_time_send", data["Responded"]["data"]);
+        prefs.setInt("count_send", count);
+        print("Вход осуществлен");
+        return RecoveryResponseCodeSended();
+      } else {
+        return RecoveryResponseServerError(
+            data["Responded"]["message"]); /*"Ошибка сервера..."*/
+      }
+    } catch (error, stck) {
+      print("$error $stck");
+      return RecoveryResponseServerError(error.toString()); /*"Ошибка $error"*/
+    }
+  }
+
+  Future<RecoveryResponse> changePassword(
+      String phoneNumber, String pass) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      String newStr = convertToSimplePhoneNumber(phoneNumber);
+      var response;
+      try {
+        response = await _dio.post(
+            "https://kids-project-pro.herokuapp.com/verify/reset_password/$newStr",
+            data: FormData.fromMap({'password': pass}));
+      } catch (error) {}
+      print(response);
+      var jdata = jsonEncode(response.data);
+      print(jdata);
+      if (response.statusCode != 200) {
+        return RecoveryResponseServerError("Связь с сервером потеряна");
+      }
+      if (jdata == '"Password changed successfully"') {
+        return RecoveryResponsePassChanged();
+      } else {
+        return RecoveryResponseServerError("Код неверный");
+      }
+      /*if (data["Responded"]["success"] != false) {
+        print("");
+        return RecoveryResponseCodeSended();
+      } else {
+        return RecoveryResponseServerError(
+            data["Responded"]["message"]); /*"Ошибка сервера..."*/
+      }*/
+    } catch (error, stck) {
+      print("$error $stck");
+      return RecoveryResponseServerError(error.toString()); /*"Ошибка $error"*/
+    }
+    /*return Future.delayed(
+        Duration(seconds: 1), () => RecoveryResponsePassChanged());*/
   }
 }

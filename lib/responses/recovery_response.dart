@@ -2,41 +2,44 @@ import 'package:tigra/models/log_and_pas.dart';
 
 class RecoveryResponse {
   LoginAndPass loginAndPass;
+  String error;
 
   RecoveryResponse();
 
   RecoveryResponse.fromJson(var data)
       : loginAndPass = LoginAndPass.fromJson(data);
 
-  RecoveryResponse.withError() : loginAndPass = LoginAndPass.withError();
+  RecoveryResponse.withError(String err)
+      : loginAndPass = LoginAndPass.withError(),
+        error = err;
 }
 
 class RecoveryResponseOk extends RecoveryResponse {
-  RecoveryResponseOk(/*var data*/) : super.withError(/*data*/);
+  RecoveryResponseOk() : super();
 }
 
 class RecoveryResponseServerError extends RecoveryResponse {
-  RecoveryResponseServerError() : super.withError();
-}
-
-class RecoveryResponseCodeError extends RecoveryResponse {
-  RecoveryResponseCodeError() : super.withError();
+  RecoveryResponseServerError(String error) : super.withError(error);
 }
 
 class RecoveryResponseCodeChecking extends RecoveryResponse {
-  RecoveryResponseCodeChecking() : super.withError();
+  RecoveryResponseCodeChecking() : super();
 }
 
 class RecoveryResponseCodeDidNotCome extends RecoveryResponse {
-  RecoveryResponseCodeDidNotCome() : super.withError();
+  RecoveryResponseCodeDidNotCome() : super();
 }
 
 class RecoveryResponseCodeSended extends RecoveryResponse {
-  RecoveryResponseCodeSended() : super.withError();
+  RecoveryResponseCodeSended() : super();
 }
 
 class RecoveryResponseToPhoneEnter extends RecoveryResponse {
-  RecoveryResponseToPhoneEnter() : super.withError();
+  RecoveryResponseToPhoneEnter() : super();
+}
+
+class RecoveryResponsePassChanged extends RecoveryResponse {
+  RecoveryResponsePassChanged() : super();
 }
 /*
   RecoveryResponseOk
@@ -46,4 +49,5 @@ class RecoveryResponseToPhoneEnter extends RecoveryResponse {
   RecoveryResponseCodeDidNotCome
   RecoveryResponseCodeSended
   RecoveryResponseToPhoneEnter
+  RecoveryResponsePassChanged
 */
