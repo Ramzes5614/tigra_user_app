@@ -136,7 +136,8 @@ class AppKeys {
     GlobalKey<FormState>(), //6 - регистрация - отчество
     GlobalKey<FormState>(), //7 - регистрация - телефон
     GlobalKey<FormState>(), //8 - регистрация - пароль
-    GlobalKey<FormState>() //9 - ввод кода
+    GlobalKey<FormState>(), //9 - ввод кода
+    GlobalKey<FormState>() //10 - ввод кода
   ];
   //final GlobalKey<FormFieldState> txtEmailKey = GlobalKey<FormFieldState>();
 }

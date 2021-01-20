@@ -135,7 +135,8 @@ class _RecoveryScreen extends State<RecoveryScreen> {
       recoveryBloc.sendCode(_controller.text);
       _controller.clear();
     } else if (recoveryBloc.last is RecoveryResponseOk) {
-      if (keys.formLoginKeys[1].currentState.validate()) {
+      if (keys.formLoginKeys[2].currentState.validate() &&
+          keys.formLoginKeys[3].currentState.validate()) {
         String newPass = _firstPassController.text;
         recoveryBloc.changePass(_phoneNumber, newPass);
       }

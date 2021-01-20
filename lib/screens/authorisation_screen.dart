@@ -21,8 +21,8 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
   TextEditingController _passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    _loginController.value = TextEditingValue(text: "+79033064659");
-    _passwordController.value = TextEditingValue(text: "Google5656");
+    //_loginController.value = TextEditingValue(text: "+79033064659");
+    //_passwordController.value = TextEditingValue(text: "Google5656");
     return Scaffold(
       body: WillPopScope(
         onWillPop: () => authorisationBloc.pickState(UserUnAuth()),

@@ -49,14 +49,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   ),
                   CodeEnterWidget(
                     codeController: _codeController,
-                    key: keys.formLoginKeys[9],
+                    key: keys.formLoginKeys[10],
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   GestureDetector(
                     onTap: () async {
-                      if (!keys.formLoginKeys[9].currentState.validate()) {
+                      if (!keys.formLoginKeys[10].currentState.validate()) {
                         return;
                       }
                       if (await _appRepository.codeCheckBool(
