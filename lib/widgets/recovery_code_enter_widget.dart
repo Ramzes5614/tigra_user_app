@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:tigra/screens/authorisation_screen.dart';
-import 'package:tigra/styles/theme.dart';
-import 'package:tigra/widgets/timer_widget.dart';
+import 'package:Tigra/screens/authorisation_screen.dart';
+import 'package:Tigra/styles/theme.dart';
+import 'package:Tigra/widgets/timer_widget.dart';
 
 class CodeEnterWidget extends StatefulWidget {
-  final Key key;
   final TextEditingController codeController;
-  CodeEnterWidget({this.codeController, this.key});
+  final Function onTapF;
+  CodeEnterWidget({this.codeController, this.onTapF});
   @override
   _CodeEnterWidgetState createState() => _CodeEnterWidgetState();
 }
@@ -42,7 +42,7 @@ class _CodeEnterWidgetState extends State<CodeEnterWidget> {
             height: 15,
           ),
           Form(
-            key: widget.key,
+            key: AppKeys.keys10,
             child: TextFormField(
               //initialValue: "+79033064659",
               controller: widget.codeController,
@@ -64,6 +64,7 @@ class _CodeEnterWidgetState extends State<CodeEnterWidget> {
           ),
           GestureDetector(
             onTap: () {
+              widget.onTapF();
               if (!_timerWorking) {
                 setState(() {
                   _timerWorking = true;

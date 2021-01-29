@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tigra/elements/methods.dart';
-import 'package:tigra/main.dart';
-import 'package:tigra/models/log_and_pas.dart';
-import 'package:tigra/responses/user_response.dart';
-import 'package:tigra/styles/theme.dart';
+import 'package:Tigra/elements/methods.dart';
+import 'package:Tigra/main.dart';
+import 'package:Tigra/models/log_and_pas.dart';
+import 'package:Tigra/responses/user_response.dart';
+import 'package:Tigra/styles/theme.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 class AuthorisationScreen extends StatefulWidget {
@@ -44,7 +44,7 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
                     Column(
                       children: [
                         Form(
-                          key: keys.formLoginKeys[0],
+                          key: AppKeys.keys0,
                           child: Container(
                             height: 41,
                             width: 240,
@@ -69,7 +69,7 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
                           height: 15,
                         ),
                         Form(
-                          key: keys.formLoginKeys[1],
+                          key: AppKeys.keys1,
                           child: Container(
                             height: 41,
                             width: 240,
@@ -77,16 +77,8 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
                               //initialValue: "Google5656",
                               controller: _passwordController,
                               validator: (str) {
-                                if (str.length < 6) {
+                                if (str.length == 0) {
                                   return "Пароль слишком короткий";
-                                } else if (!str
-                                    .contains(new RegExp(r'[0-9]'))) {
-                                  return "Пороль должен содержать хотя-бы одну цифру";
-                                } else if (!str
-                                    .contains(new RegExp(r'[a-x]'))) {
-                                  return "Пароль должен содержать хотя-бы одну букву латинского алфавита";
-                                } else if (str.length > 32) {
-                                  return "Пароль слишком длинный";
                                 } else {
                                   return null;
                                 }
@@ -151,8 +143,8 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
 
   _submit() {
     try {
-      if (keys.formLoginKeys[0].currentState.validate() &&
-          keys.formLoginKeys[1].currentState.validate()) {
+      if (AppKeys.keys0.currentState.validate() &&
+          AppKeys.keys1.currentState.validate()) {
         userLP.login = convertToSimplePhoneNumber(_loginController.text);
         userLP.password = _passwordController.text;
         authorisationBloc.logIn(userLP);

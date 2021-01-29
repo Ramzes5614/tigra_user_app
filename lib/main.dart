@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tigra/blocs/user_auth_bloc.dart';
-import 'package:tigra/screens/main_screen.dart';
+import 'package:Tigra/blocs/user_auth_bloc.dart';
+import 'package:Tigra/screens/main_screen.dart';
 import 'styles/theme.dart';
 import 'package:flutter/services.dart';
 

@@ -1,4 +1,4 @@
-import 'package:tigra/models/log_and_pas.dart';
+import 'package:Tigra/models/log_and_pas.dart';
 
 class RecoveryResponse {
   LoginAndPass loginAndPass;
@@ -40,6 +40,10 @@ class RecoveryResponseToPhoneEnter extends RecoveryResponse {
 
 class RecoveryResponsePassChanged extends RecoveryResponse {
   RecoveryResponsePassChanged() : super();
+}
+
+class RecoveryResponseCodeError extends RecoveryResponse {
+  RecoveryResponseCodeError(String error) : super.withError(error);
 }
 /*
   RecoveryResponseOk

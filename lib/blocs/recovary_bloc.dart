@@ -1,12 +1,13 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:tigra/repos/app_repository.dart';
-import 'package:tigra/responses/recovery_response.dart';
-import 'package:tigra/responses/user_response.dart';
+import 'package:Tigra/repos/app_repository.dart';
+import 'package:Tigra/responses/recovery_response.dart';
 
 class RecoveryBloc {
   final AppRepository _repository = AppRepository();
   BehaviorSubject<RecoveryResponse> _controller =
       BehaviorSubject<RecoveryResponse>();
+
+  String _phone = "";
 
   RecoveryResponse _lastResponse = RecoveryResponseToPhoneEnter();
 
@@ -26,6 +27,7 @@ class RecoveryBloc {
   }
 
   sendCode(String phoneNumber) async {
+    _phone = phoneNumber;
     _controller.sink.add(RecoveryResponseCodeChecking());
     RecoveryResponse response = await _repository.sendCode(phoneNumber);
     _controller.sink.add(response);
@@ -45,6 +47,18 @@ class RecoveryBloc {
   }
 
   pickState(RecoveryResponse response) {
+    _controller.sink.add(response);
+    if (!(response is RecoveryResponseServerError)) {
+      _lastResponse = response;
+    }
+  }
+
+  didNotCame() async {
+    if (_phone == "") {
+      print("нету номера телефона");
+      return;
+    }
+    RecoveryResponse response = await _repository.sendCode(_phone);
     _controller.sink.add(response);
     if (!(response is RecoveryResponseServerError)) {
       _lastResponse = response;

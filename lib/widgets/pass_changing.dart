@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:tigra/screens/authorisation_screen.dart';
-import 'package:tigra/styles/theme.dart';
+import 'package:Tigra/screens/authorisation_screen.dart';
+import 'package:Tigra/styles/theme.dart';
 
 class PassChangeContainer extends StatefulWidget {
   final TextEditingController _firstPassController;
   final TextEditingController _secondPassController;
-  Key key;
-  PassChangeContainer(
-      this.key, this._firstPassController, this._secondPassController);
+  PassChangeContainer(this._firstPassController, this._secondPassController);
   @override
   _PassChangeContainer createState() => _PassChangeContainer();
 }
@@ -38,7 +35,7 @@ class _PassChangeContainer extends State<PassChangeContainer> {
             height: 20,
           ),
           Form(
-            key: keys.formLoginKeys[2],
+            key: AppKeys.keys2,
             child: Container(
               height: 41,
               width: 240,
@@ -64,10 +61,10 @@ class _PassChangeContainer extends State<PassChangeContainer> {
             ),
           ),
           SizedBox(
-            height: 10,
+            height: 25,
           ),
           Form(
-            key: keys.formLoginKeys[3],
+            key: AppKeys.keys3,
             child: Container(
               height: 41,
               width: 240,

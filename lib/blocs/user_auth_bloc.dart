@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
-import 'package:tigra/models/log_and_pas.dart';
-import 'package:tigra/models/user_model.dart';
-import 'package:tigra/repos/app_repository.dart';
-import 'package:tigra/responses/user_response.dart';
+import 'package:Tigra/models/log_and_pas.dart';
+import 'package:Tigra/models/user_model.dart';
+import 'package:Tigra/repos/app_repository.dart';
+import 'package:Tigra/responses/user_response.dart';
 
 class UserAuthorisationBloc {
   final AppRepository repository = AppRepository();

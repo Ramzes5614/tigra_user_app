@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tigra/elements/methods.dart';
-import 'package:tigra/models/user_model.dart';
-import 'package:tigra/responses/recovery_response.dart';
-import 'package:tigra/responses/user_response.dart';
+import 'package:Tigra/elements/methods.dart';
+import 'package:Tigra/models/user_model.dart';
+import 'package:Tigra/responses/recovery_response.dart';
+import 'package:Tigra/responses/user_response.dart';
 import 'package:dio/dio.dart';
 
 class AppRepository {
@@ -29,7 +29,7 @@ class AppRepository {
           prefs.setString("phone_number", login);
           prefs.setString("first_name", data["profile"]["first_name"]);
           prefs.setString("last_name", data["profile"]["last_name"]);
-          prefs.setInt("visits_counter", data["profile"]["visit_counter"]);
+          prefs.setInt("visit_counter", data["profile"]["visit_counter"]);
           prefs.setString("password", password);
           print("Вход осуществлен");
           return UserLoggedIn({
@@ -57,9 +57,6 @@ class AppRepository {
   Future<UserResponse> localAuthorisation() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String login = prefs.getString("phone_number");
-    //String firstName = prefs.getString("first_name");
-    //String lastName = prefs.getString("last_name");
-    //int visitsCount = prefs.getInt("visits_counter");
     String password = prefs.getString("password");
     try {
       if (login != null && password != null) {
@@ -80,7 +77,7 @@ class AppRepository {
               prefs.setString("phone_number", login);
               prefs.setString("first_name", data["profile"]["first_name"]);
               prefs.setString("last_name", data["profile"]["last_name"]);
-              prefs.setInt("visits_counter", data["profile"]["visit_counter"]);
+              prefs.setInt("visit_counter", data["profile"]["visit_counter"]);
               prefs.setString("password", password);
               print(data["profile"]["visit_counter"]);
               print("Вход осуществлен");
@@ -276,7 +273,7 @@ class AppRepository {
     prefs.remove("phone_number");
     prefs.remove("first_name");
     prefs.remove("last_name");
-    prefs.remove("visits_counter");
+    prefs.remove("visit_counter");
     prefs.remove("password");
     return UserUnAuth();
   }
@@ -313,47 +310,29 @@ class AppRepository {
   Future<RecoveryResponse> codeCheck(String phoneNumber, String code) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      String newStr = convertToSimplePhoneNumber(phoneNumber);
-      var response = await _dio.post(
-          "https://kids-project-pro.herokuapp.com/verify/confirm_phone/$newStr",
-          data: FormData.fromMap({'otp': code}));
-      print(response);
-      var jdata = jsonEncode(response.data);
-      print(jdata);
-      if (response.statusCode != 200) {
-        return RecoveryResponseServerError("Связь с сервером потеряна");
-      }
-      if (jdata == '"Phone number found"') {
-        return RecoveryResponseOk();
+      String sendedOTP = prefs.getString("otp");
+      if (code == sendedOTP) {
+        String newStr = convertToSimplePhoneNumber(phoneNumber);
+        var response = await _dio.post(
+            "https://kids-project-pro.herokuapp.com/verify/confirm_phone/$newStr",
+            data: FormData.fromMap({'otp': code}));
+        print(response);
+        var jdata = jsonEncode(response.data);
+        print(jdata);
+        if (response.statusCode != 200) {
+          return RecoveryResponseServerError("Связь с сервером потеряна");
+        }
+        if (jdata == '"Phone number found"') {
+          return RecoveryResponseOk();
+        } else {
+          return RecoveryResponseCodeError("Код неверный");
+        }
       } else {
-        return RecoveryResponseServerError("Код неверный");
+        return RecoveryResponseCodeError("Код неверный");
       }
     } catch (error, stck) {
       print("$error $stck");
       return RecoveryResponseServerError(error.toString()); /*"Ошибка $error"*/
-    }
-  }
-
-  Future<bool> codeCheckBool(String phoneNumber, String code) async {
-    try {
-      String newStr = convertToSimplePhoneNumber(phoneNumber);
-      var response = await _dio.post(
-          "https://kids-project-pro.herokuapp.com/verify/confirm_phone/$newStr",
-          data: FormData.fromMap({'otp': code}));
-      print(response);
-      var jdata = jsonEncode(response.data);
-      print(jdata);
-      if (response.statusCode != 200) {
-        return false;
-      }
-      if (jdata == '"Phone number found"') {
-        return true;
-      } else {
-        return false;
-      }
-    } catch (error, stck) {
-      print("$error $stck");
-      return false;
     }
   }
 
@@ -362,8 +341,21 @@ class AppRepository {
     int count;
     DateTime _time;
     try {
-      _time = DateTime.parse(prefs.getString("last_time_send"));
-      count = prefs.getInt("count_send");
+      count = prefs.getInt("count_send") ?? 0;
+
+      ///Проверка количества и времени отправок перед запросом
+      ///Если было больше 3 запросов за последние 2 часа - возврат сообщения
+      ///Иначе - продолжает запрос на отправку кода
+      int _lastTime = prefs.getInt("last_time_send") ??
+          DateTime.now().millisecondsSinceEpoch;
+      int _count = prefs.getInt("count_send");
+      DateTime _lastResp = DateTime.fromMillisecondsSinceEpoch(_lastTime);
+      if (_lastTime != null && _count != null) {
+        if (_count >= 3 && (DateTime.now().difference(_lastResp).inHours < 2)) {
+          return RecoveryResponseServerError(
+              "Слишком много попыток, повторите позже");
+        }
+      }
     } catch (error) {
       count = 0;
     }
@@ -387,7 +379,7 @@ class AppRepository {
       if (data["Responded"]["success"] != false) {
         count++;
         prefs.setString("otp", data["OTP"]);
-        prefs.setString("last_time_send", DateTime.now().toString());
+        prefs.setInt("last_time_send", DateTime.now().millisecondsSinceEpoch);
         prefs.setInt("count_send", count);
         print("Вход осуществлен");
         return RecoveryResponseCodeSended();
@@ -419,6 +411,9 @@ class AppRepository {
         return RecoveryResponseServerError("Связь с сервером потеряна");
       }
       if (jdata == '"Password changed successfully"') {
+        prefs.remove("otp");
+        prefs.remove("last_time_send");
+        prefs.remove("count_send");
         return RecoveryResponsePassChanged();
       } else {
         return RecoveryResponseServerError("Код неверный");

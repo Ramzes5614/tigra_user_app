@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tigra/main.dart';
-import 'package:tigra/responses/user_response.dart';
-import 'package:tigra/screens/recovery_screen.dart';
-import 'package:tigra/styles/theme.dart';
+import 'package:Tigra/main.dart';
+import 'package:Tigra/responses/user_response.dart';
+import 'package:Tigra/screens/recovery_screen.dart';
+import 'package:Tigra/styles/theme.dart';
 
 class HelpScreen extends StatefulWidget {
   @override

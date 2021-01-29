@@ -1,4 +1,4 @@
-import 'package:tigra/models/user_model.dart';
+import 'package:Tigra/models/user_model.dart';
 
 class UserResponse {
   UserModel user;

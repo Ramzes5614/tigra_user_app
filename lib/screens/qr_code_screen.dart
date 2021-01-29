@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-import 'package:tigra/elements/methods.dart';
-import 'package:tigra/main.dart';
-import 'package:tigra/models/user_model.dart';
-import 'package:tigra/styles/theme.dart';
-import 'package:tigra/widgets/widgets.dart';
+import 'package:Tigra/elements/methods.dart';
+import 'package:Tigra/main.dart';
+import 'package:Tigra/models/user_model.dart';
+import 'package:Tigra/styles/theme.dart';
+import 'package:Tigra/widgets/widgets.dart';
 
 class QrCodeScreen extends StatefulWidget {
   final UserModel user;

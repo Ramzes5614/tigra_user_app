@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tigra/blocs/user_auth_bloc.dart';
-import 'package:tigra/styles/theme.dart';
-import 'package:tigra/main.dart';
+import 'package:Tigra/blocs/user_auth_bloc.dart';
+import 'package:Tigra/styles/theme.dart';
+import 'package:Tigra/main.dart';
 
 class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
   final double height;

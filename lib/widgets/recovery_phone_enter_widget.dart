@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:tigra/screens/authorisation_screen.dart';
-import 'package:tigra/styles/theme.dart';
+import 'package:Tigra/screens/authorisation_screen.dart';
+import 'package:Tigra/styles/theme.dart';
 
 class PhoneEnterContainer extends StatefulWidget {
-  final Key key;
   final TextEditingController _loginController;
-  PhoneEnterContainer(this._loginController, this.key);
+  PhoneEnterContainer(this._loginController);
   @override
   _PhoneEnterContainerState createState() => _PhoneEnterContainerState();
 }
@@ -31,7 +30,7 @@ class _PhoneEnterContainerState extends State<PhoneEnterContainer> {
             height: 30,
           ),
           Form(
-            key: widget.key,
+            key: AppKeys.keys12,
             child: Container(
               width: 240,
               height: 41,

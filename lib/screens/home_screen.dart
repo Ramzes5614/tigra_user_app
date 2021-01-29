@@ -2,11 +2,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:tigra/models/user_model.dart';
-import 'package:tigra/main.dart';
-import 'package:tigra/screens/qr_code_screen.dart';
-import 'package:tigra/styles/theme.dart';
-import 'package:tigra/widgets/widgets.dart';
+import 'package:Tigra/elements/methods.dart';
+import 'package:Tigra/models/user_model.dart';
+import 'package:Tigra/main.dart';
+import 'package:Tigra/screens/qr_code_screen.dart';
+import 'package:Tigra/styles/theme.dart';
+import 'package:Tigra/widgets/widgets.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 
 class HomeSchreen extends StatefulWidget {
@@ -81,7 +82,7 @@ class _HomeSchreenState extends State<HomeSchreen> {
                               Container(
                                 padding: EdgeInsets.only(top: 24),
                                 child: AutoSizeText(
-                                  "${widget.user.userPhoneNumber}",
+                                  "${convertFromSimplePhoneNumber(widget.user.userPhoneNumber)}",
                                   style: kSurnameTextStyle,
                                 ),
                               )
@@ -96,12 +97,12 @@ class _HomeSchreenState extends State<HomeSchreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   //crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Container(
+                    Flexible(
                       child: AutoSizeText("До бесплатного посещения:",
                           overflow: TextOverflow.visible,
                           style: kSurnameTextStyle),
                     ),
-                    Container(
+                    Flexible(
                       child: AutoSizeText(
                         "$_visitsToFree",
                         style: kVisitsNumberTextStyle,
@@ -109,7 +110,7 @@ class _HomeSchreenState extends State<HomeSchreen> {
                     )
                   ],
                 ),
-                CircleVisits(widget.user.visits),
+                Flexible(child: CircleVisits(widget.user.visits)),
                 Padding(
                   padding: EdgeInsets.all(30),
                   child: Column(children: [

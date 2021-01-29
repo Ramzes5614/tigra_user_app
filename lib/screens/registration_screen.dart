@@ -3,15 +3,15 @@ import 'dart:math';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:tigra/blocs/navigation_bloc.dart';
-import 'package:tigra/blocs/registration_bloc.dart';
-import 'package:tigra/elements/loading_spinkit.dart';
-import 'package:tigra/main.dart';
-import 'package:tigra/models/user_model.dart';
-import 'package:tigra/responses/user_response.dart';
-import 'package:tigra/screens/authorisation_screen.dart';
-import 'package:tigra/styles/theme.dart';
-import 'package:tigra/widgets/recovery_code_enter_widget.dart';
+import 'package:Tigra/blocs/navigation_bloc.dart';
+import 'package:Tigra/blocs/registration_bloc.dart';
+import 'package:Tigra/elements/loading_spinkit.dart';
+import 'package:Tigra/main.dart';
+import 'package:Tigra/models/user_model.dart';
+import 'package:Tigra/responses/user_response.dart';
+import 'package:Tigra/screens/authorisation_screen.dart';
+import 'package:Tigra/styles/theme.dart';
+import 'package:Tigra/widgets/recovery_code_enter_widget.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -42,106 +42,110 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           child: Center(
             child: Container(
               padding: EdgeInsets.fromLTRB(10, 10, 10, 10),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(5),
-                    child: Text(
-                      "Регистрация",
-                      style: kTitleTextStyle,
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.all(5),
+                      child: Text(
+                        "Регистрация",
+                        style: kTitleTextStyle,
+                      ),
                     ),
-                  ),
-                  StreamBuilder(
-                    stream: registrationBloc.subject,
-                    builder: (context, AsyncSnapshot<REGSTATE> snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data == REGSTATE.TOREGSCR) {
-                          _isCodeSended = false;
-                          return _registrationTextFields();
-                        } else if (snapshot.data == REGSTATE.LOADING) {
-                          return loadingSpinkit();
-                        } else if (snapshot.data == REGSTATE.CODESENDED) {
-                          _isCodeSended = true;
-                          return CodeEnterWidget(
-                              codeController: _codeController,
-                              key: keys.formLoginKeys[11]);
-                        }
-                      }
-                      return _registrationTextFields();
-                    },
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Container(
-                    padding: EdgeInsets.all(8),
-                    child: StreamBuilder(
+                    SizedBox(height: 40),
+                    StreamBuilder(
                       stream: registrationBloc.subject,
                       builder: (context, AsyncSnapshot<REGSTATE> snapshot) {
                         if (snapshot.hasData) {
-                          if (snapshot.data == REGSTATE.ERROR) {
+                          if (snapshot.data == REGSTATE.TOREGSCR) {
                             _isCodeSended = false;
-                            return AutoSizeText(
-                              "Ошибка сервера, повторите позже",
-                              overflow: TextOverflow.visible,
-                              style: kErrorTextStyle,
-                            );
-                          } else if (snapshot.data == REGSTATE.CODEERROR) {
-                            return AutoSizeText(
-                              "Неверный код",
-                              overflow: TextOverflow.visible,
-                              style: kErrorTextStyle,
-                            );
-                          } else if (snapshot.data == REGSTATE.ALREADYEXIST) {
-                            _isCodeSended = false;
-                            return AutoSizeText(
-                              "Данный номер телефона уже зарегистрирован",
-                              overflow: TextOverflow.visible,
-                              style: kErrorTextStyle,
-                            );
-                          } else if (snapshot.data == REGSTATE.NOUSER) {
-                            _isCodeSended = false;
-                            return AutoSizeText(
-                              "Введите данные пользователя",
-                              overflow: TextOverflow.visible,
-                              style: kErrorTextStyle,
+                            return _registrationTextFields();
+                          } else if (snapshot.data == REGSTATE.LOADING) {
+                            return loadingSpinkit();
+                          } else if (snapshot.data == REGSTATE.CODESENDED) {
+                            _isCodeSended = true;
+                            return CodeEnterWidget(
+                              codeController: _codeController,
+                              onTapF: () => registrationBloc.didNotCame(),
                             );
                           }
                         }
-                        return AutoSizeText(
-                          "",
-                          overflow: TextOverflow.visible,
-                          style: kErrorTextStyle,
-                        );
+                        return _registrationTextFields();
                       },
                     ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      if (_isCodeSended)
-                        _registrationCodeChecking();
-                      else
-                        _registrationCodeSend();
-                    },
-                    child: Container(
-                      height: 41,
-                      width: 240,
-                      decoration: kOrangeBoxDecorationOrangeBorder,
-                      padding: EdgeInsets.all(5),
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          "Регистрация",
-                          style: kBottomTextStyleWhite,
-                        ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(8),
+                      child: StreamBuilder(
+                        stream: registrationBloc.subject,
+                        builder: (context, AsyncSnapshot<REGSTATE> snapshot) {
+                          if (snapshot.hasData) {
+                            if (snapshot.data == REGSTATE.ERROR) {
+                              _isCodeSended = false;
+                              return AutoSizeText(
+                                "Ошибка сервера, повторите позже",
+                                overflow: TextOverflow.visible,
+                                style: kErrorTextStyle,
+                              );
+                            } else if (snapshot.data == REGSTATE.CODEERROR) {
+                              return AutoSizeText(
+                                "Неверный код",
+                                overflow: TextOverflow.visible,
+                                style: kErrorTextStyle,
+                              );
+                            } else if (snapshot.data == REGSTATE.ALREADYEXIST) {
+                              _isCodeSended = false;
+                              return AutoSizeText(
+                                "Данный номер телефона уже зарегистрирован",
+                                overflow: TextOverflow.visible,
+                                style: kErrorTextStyle,
+                              );
+                            } else if (snapshot.data == REGSTATE.NOUSER) {
+                              _isCodeSended = false;
+                              return AutoSizeText(
+                                "Введите данные пользователя",
+                                overflow: TextOverflow.visible,
+                                style: kErrorTextStyle,
+                              );
+                            }
+                          }
+                          return AutoSizeText(
+                            "",
+                            overflow: TextOverflow.visible,
+                            style: kErrorTextStyle,
+                          );
+                        },
                       ),
                     ),
-                  )
-                ],
+                    SizedBox(
+                      height: 10,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        if (_isCodeSended)
+                          _registrationCodeChecking();
+                        else
+                          _registrationCodeSend();
+                      },
+                      child: Container(
+                        height: 41,
+                        width: 240,
+                        decoration: kOrangeBoxDecorationOrangeBorder,
+                        padding: EdgeInsets.all(5),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Регистрация",
+                            style: kBottomTextStyleWhite,
+                          ),
+                        ),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ),
           ),
@@ -154,7 +158,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
     return Column(
       children: [
         Form(
-          key: keys.formLoginKeys[4],
+          key: AppKeys.keys4,
           child: Container(
             height: 50,
             width: 240,
@@ -175,7 +179,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           height: 15,
         ),
         Form(
-          key: keys.formLoginKeys[5],
+          key: AppKeys.keys5,
           child: Container(
             height: 50,
             width: 240,
@@ -196,7 +200,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           height: 15,
         ),
         Form(
-          key: keys.formLoginKeys[6],
+          key: AppKeys.keys6,
           child: Container(
             height: 50,
             width: 240,
@@ -217,7 +221,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           height: 15,
         ),
         Form(
-          key: keys.formLoginKeys[7],
+          key: AppKeys.keys7,
           child: Container(
             height: 50,
             width: 240,
@@ -242,7 +246,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
           height: 15,
         ),
         Form(
-          key: keys.formLoginKeys[8],
+          key: AppKeys.keys8,
           child: Container(
             height: 50,
             width: 240,
@@ -288,11 +292,11 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void _registrationCodeSend() {
-    bool _first = keys.formLoginKeys[4].currentState.validate();
-    bool _second = keys.formLoginKeys[5].currentState.validate();
-    bool _third = keys.formLoginKeys[6].currentState.validate();
-    bool _fourth = keys.formLoginKeys[7].currentState.validate();
-    bool _fifth = keys.formLoginKeys[8].currentState.validate();
+    bool _first = AppKeys.keys4.currentState.validate();
+    bool _second = AppKeys.keys5.currentState.validate();
+    bool _third = AppKeys.keys6.currentState.validate();
+    bool _fourth = AppKeys.keys7.currentState.validate();
+    bool _fifth = AppKeys.keys8.currentState.validate();
     if (!_first || !_second || !_third || !_fourth || !_fifth) {
       return;
     }
@@ -306,7 +310,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   void _registrationCodeChecking() {
-    if (!keys.formLoginKeys[11].currentState.validate()) {
+    if (!AppKeys.keys10.currentState.validate()) {
       return;
     }
     registrationBloc.codeCheck(_codeController.text);

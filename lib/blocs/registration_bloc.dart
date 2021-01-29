@@ -1,8 +1,8 @@
 import 'package:rxdart/rxdart.dart';
-import 'package:tigra/main.dart';
-import 'package:tigra/models/user_model.dart';
-import 'package:tigra/repos/app_repository.dart';
-import 'package:tigra/responses/user_response.dart';
+import 'package:Tigra/main.dart';
+import 'package:Tigra/models/user_model.dart';
+import 'package:Tigra/repos/app_repository.dart';
+import 'package:Tigra/responses/user_response.dart';
 
 enum REGSTATE {
   TOREGSCR,
@@ -23,11 +23,14 @@ class RegistrationBloc {
 
   REGSTATE get defaultItem => REGSTATE.TOREGSCR;
 
+  UserModel _user;
+
   pickItem(REGSTATE item) {
     _controller.sink.add(item);
   }
 
   registrate(UserModel user) async {
+    _user = user;
     print(
         "Отправляем запрос: ${user.surname} ${user.name}, ${user.userPhoneNumber}");
     _controller.sink.add(REGSTATE.LOADING);
@@ -66,6 +69,21 @@ class RegistrationBloc {
       authorisationBloc.pickState(user);
     } else if (response == -2) {
       _controller.sink.add(REGSTATE.CODEERROR);
+    } else {
+      _controller.sink.add(REGSTATE.ERROR);
+    }
+  }
+
+  didNotCame() async {
+    if (_user == null) {
+      return;
+    }
+    int response = await _repository.registrate(_user);
+    print(response);
+    if (response == 0) {
+      _controller..sink.add(REGSTATE.CODESENDED);
+    } else if (response == -2) {
+      _controller.sink.add(REGSTATE.ALREADYEXIST);
     } else {
       _controller.sink.add(REGSTATE.ERROR);
     }

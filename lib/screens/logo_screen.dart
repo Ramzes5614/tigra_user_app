@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tigra/main.dart';
-import 'package:tigra/responses/user_response.dart';
-import 'package:tigra/styles/theme.dart';
+import 'package:Tigra/main.dart';
+import 'package:Tigra/responses/user_response.dart';
+import 'package:Tigra/styles/theme.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LogoScreen extends StatefulWidget {

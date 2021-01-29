@@ -124,7 +124,26 @@ const kHelperContactsTextStyle = TextStyle(
     fontWeight: FontWeight.bold);
 
 class AppKeys {
-  List<GlobalKey<FormState>> formLoginKeys = [
+  static final keys0 = GlobalKey<FormState>(debugLabel: '_auth_login');
+  static final keys1 = GlobalKey<FormState>(debugLabel: '_auth_pass');
+  static final keys2 = GlobalKey<FormState>(debugLabel: '_passchange1');
+  static final keys3 = GlobalKey<FormState>(debugLabel: '_passchenge2');
+  static final keys4 =
+      GlobalKey<FormState>(debugLabel: '_registration_surname');
+  static final keys5 = GlobalKey<FormState>(debugLabel: '_registration_name');
+  static final keys6 =
+      GlobalKey<FormState>(debugLabel: '_registration_middle_name');
+  static final keys7 = GlobalKey<FormState>(debugLabel: '_registration_phone');
+  static final keys8 = GlobalKey<FormState>(debugLabel: '_registration_pass');
+  static final keys9 =
+      GlobalKey<FormState>(debugLabel: '_registration_code_enter');
+  static final keys10 = GlobalKey<FormState>(debugLabel: '_code_enter');
+  static final keys11 =
+      GlobalKey<FormState>(debugLabel: '_code_enter_reg_screen');
+  static final keys12 =
+      GlobalKey<FormState>(debugLabel: '_passchange_screen_phone');
+
+  /*List<GlobalKey<FormState>> formLoginKeys = [
     GlobalKey<FormState>(), //0 - авторизация - логин
     GlobalKey<FormState>(), //1 - авторизация - пароль
     /*********************************************/
@@ -136,11 +155,11 @@ class AppKeys {
     GlobalKey<FormState>(), //6 - регистрация - отчество
     GlobalKey<FormState>(), //7 - регистрация - телефон
     GlobalKey<FormState>(), //8 - регистрация - пароль
-    GlobalKey<FormState>(), //9 - ввод кода
+    GlobalKey<FormState>(), //9 - ввод кода - регистрация
     GlobalKey<FormState>(), //10 - ввод кода
     GlobalKey<FormState>(), //11 - ввод кода экран регистрации
     GlobalKey<FormState>() //12 - изменение пароля - телефон
-  ];
+  ];*/
   //final GlobalKey<FormFieldState> txtEmailKey = GlobalKey<FormFieldState>();
 }
 

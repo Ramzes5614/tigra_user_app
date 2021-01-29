@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'dart:ui';
 import 'package:flutter/rendering.dart';
-import 'package:tigra/styles/theme.dart';
+import 'package:Tigra/styles/theme.dart';
 
 class GenerateScreen extends StatefulWidget {
   String _dataString;
