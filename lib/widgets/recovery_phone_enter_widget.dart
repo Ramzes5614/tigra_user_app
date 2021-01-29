@@ -4,8 +4,9 @@ import 'package:tigra/screens/authorisation_screen.dart';
 import 'package:tigra/styles/theme.dart';
 
 class PhoneEnterContainer extends StatefulWidget {
-  TextEditingController _loginController;
-  PhoneEnterContainer(this._loginController);
+  final Key key;
+  final TextEditingController _loginController;
+  PhoneEnterContainer(this._loginController, this.key);
   @override
   _PhoneEnterContainerState createState() => _PhoneEnterContainerState();
 }
@@ -29,23 +30,26 @@ class _PhoneEnterContainerState extends State<PhoneEnterContainer> {
           SizedBox(
             height: 30,
           ),
-          Container(
-            width: 240,
-            height: 41,
-            child: TextFormField(
-              //initialValue: "+79033064659",
-              controller: widget._loginController,
-              validator: (str) {
-                if (str.length == 0) {
-                  return "Введите номер телефона";
-                } else if (str[1] != '7') {
-                  return "Введите номер с кодом +7";
-                } else {
-                  return null;
-                }
-              },
-              inputFormatters: [maskFormatter],
-              decoration: inputDecor("Номер телефона"),
+          Form(
+            key: widget.key,
+            child: Container(
+              width: 240,
+              height: 41,
+              child: TextFormField(
+                //initialValue: "+79033064659",
+                controller: widget._loginController,
+                validator: (str) {
+                  if (str.length == 0) {
+                    return "Введите номер телефона";
+                  } else if (str[1] != '7') {
+                    return "Введите номер с кодом +7";
+                  } else {
+                    return null;
+                  }
+                },
+                inputFormatters: [maskFormatter],
+                decoration: inputDecor("Номер телефона"),
+              ),
             ),
           ),
         ],

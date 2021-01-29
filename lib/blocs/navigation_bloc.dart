@@ -1,6 +1,13 @@
-import 'dart:async';
+/*import 'dart:async';
 
-enum NavigatorMenu { LOGO, AUTHORISATION, REGISTRATION, HOME, QRSCREEN }
+enum NavigatorMenu {
+  LOGO,
+  AUTHORISATION,
+  REGISTRATION,
+  HOME,
+  QRSCREEN,
+  RECOVERY
+}
 
 class NavigationBloc {
   final StreamController<NavigatorMenu> _streamController =
@@ -29,3 +36,4 @@ class NavigationBloc {
     _streamController?.close();
   }
 }
+*/

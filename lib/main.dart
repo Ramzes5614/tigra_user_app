@@ -1,14 +1,7 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:tigra/blocs/navigation_bloc.dart';
 import 'package:tigra/blocs/user_auth_bloc.dart';
-import 'package:tigra/screens/authorisation_screen.dart';
-import 'package:tigra/screens/home_screen.dart';
 import 'package:tigra/screens/main_screen.dart';
-import 'package:tigra/screens/qr_code_screen.dart';
-import 'package:tigra/screens/registration_screen.dart';
 import 'styles/theme.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter/services.dart';
 
 void main() {

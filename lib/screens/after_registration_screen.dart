@@ -1,18 +1,12 @@
-import 'dart:ffi';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:tigra/blocs/navigation_bloc.dart';
 import 'package:tigra/elements/methods.dart';
 import 'package:tigra/main.dart';
 import 'package:tigra/models/user_model.dart';
 import 'package:tigra/repos/app_repository.dart';
 import 'package:tigra/responses/user_response.dart';
-import 'package:tigra/screens/authorisation_screen.dart';
-import 'package:tigra/screens/pre_auth_screen.dart';
 import 'package:tigra/styles/theme.dart';
 import 'package:tigra/widgets/recovery_code_enter_widget.dart';
-import 'package:tigra/widgets/widgets.dart';
 
 class RegistrationScreen extends StatefulWidget {
   UserModel user;

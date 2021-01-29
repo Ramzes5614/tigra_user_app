@@ -4,10 +4,10 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:tigra/models/user_model.dart';
 import 'package:tigra/main.dart';
-import 'package:tigra/responses/user_response.dart';
 import 'package:tigra/screens/qr_code_screen.dart';
 import 'package:tigra/styles/theme.dart';
 import 'package:tigra/widgets/widgets.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class HomeSchreen extends StatefulWidget {
   final UserModel user;
@@ -17,8 +17,14 @@ class HomeSchreen extends StatefulWidget {
 }
 
 class _HomeSchreenState extends State<HomeSchreen> {
+  int _visitsToFree = 0;
   @override
   Widget build(BuildContext context) {
+    if (widget.user.visits == null) {
+      _visitsToFree = 4;
+    } else {
+      _visitsToFree = 5 - (widget.user.visits % 5) - 1;
+    }
     return WillPopScope(
       onWillPop: () => showCustDialog(context),
       child: Scaffold(
@@ -61,20 +67,20 @@ class _HomeSchreenState extends State<HomeSchreen> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
+                              AutoSizeText(
                                 "${widget.user.name}",
                                 style: kNameTextStyle,
                               ),
                               SizedBox(
                                 height: 1,
                               ),
-                              Text(
+                              AutoSizeText(
                                 "${widget.user.surname}",
                                 style: kSurnameTextStyle,
                               ),
                               Container(
                                 padding: EdgeInsets.only(top: 24),
-                                child: Text(
+                                child: AutoSizeText(
                                   "${widget.user.userPhoneNumber}",
                                   style: kSurnameTextStyle,
                                 ),
@@ -88,12 +94,18 @@ class _HomeSchreenState extends State<HomeSchreen> {
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
+                  //crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text("До бесплатного посещения:", style: kSurnameTextStyle),
-                    Text(
-                      "${5 - (widget.user.visits % 5) - 1}",
-                      style: kVisitsNumberTextStyle,
+                    Container(
+                      child: AutoSizeText("До бесплатного посещения:",
+                          overflow: TextOverflow.visible,
+                          style: kSurnameTextStyle),
+                    ),
+                    Container(
+                      child: AutoSizeText(
+                        "$_visitsToFree",
+                        style: kVisitsNumberTextStyle,
+                      ),
                     )
                   ],
                 ),
@@ -104,8 +116,8 @@ class _HomeSchreenState extends State<HomeSchreen> {
                     Container(
                         height: 41,
                         width: 300,
-                        child: widget.user.visits % 5 == 4
-                            ? Text(
+                        child: _visitsToFree == 0
+                            ? AutoSizeText(
                                 "Бесплатное посещение!",
                                 style: kVisitsTextStyle,
                               )
@@ -130,7 +142,7 @@ class _HomeSchreenState extends State<HomeSchreen> {
                         decoration: kOrangeBoxDecorationOrangeBorder,
                         child: Align(
                           alignment: Alignment.center,
-                          child: Text(
+                          child: AutoSizeText(
                             "Новое посещение",
                             style: kBottomTextStyleWhite,
                           ),

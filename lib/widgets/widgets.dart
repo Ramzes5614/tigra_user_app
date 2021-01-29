@@ -140,10 +140,16 @@ class CircleVisits extends StatefulWidget {
 class _CircleVisitsState extends State<CircleVisits> {
   final double _litleSize = 15;
   final double _bigSize = 30;
+  int _remainder;
 
   @override
   Widget build(BuildContext context) {
-    int _remainder = widget._visits % 5;
+    if (widget._visits == null) {
+      _remainder = 0;
+    } else {
+      _remainder = widget._visits % 5;
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [

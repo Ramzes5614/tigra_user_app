@@ -21,10 +21,10 @@ class UserResponse {
       : user = UserModel.fromJson(data),
         error = "";
 
-  UserResponse.fromLocal(
+  /*UserResponse.fromLocal(
       String firtName, String lastName, String phoneNumber, int visits)
       : user = UserModel.fromLocal(firtName, lastName, phoneNumber, visits),
-        error = "";
+        error = "";*/
 
   UserResponse.withError(String err)
       : user = null,

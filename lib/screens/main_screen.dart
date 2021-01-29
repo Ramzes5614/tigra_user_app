@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:tigra/blocs/navigation_bloc.dart';
-import 'package:tigra/blocs/user_auth_bloc.dart';
 import 'package:tigra/elements/loading_spinkit.dart';
 import 'package:tigra/elements/transparent_loading.dart';
 import 'package:tigra/main.dart';
@@ -9,7 +7,6 @@ import 'package:tigra/screens/authorisation_screen.dart';
 import 'package:tigra/screens/help_screen.dart';
 import 'package:tigra/screens/home_screen.dart';
 import 'package:tigra/screens/logo_screen.dart';
-import 'package:tigra/screens/pre_auth_screen.dart';
 import 'package:tigra/screens/qr_code_screen.dart';
 import 'package:tigra/screens/registration_screen.dart';
 
@@ -56,26 +53,6 @@ class _MainScreenState extends State<MainScreen> {
           authorisationBloc.logInWithLocal();
           return LoaderSpinkit();
         }
-
-        /*switch (snapshot.data) {
-          case UserStates.AUTHORISED:
-            return HomeSchreen();
-            break;
-          case UserStates.NONAUTHORISED:
-            return PreAuthScreen();
-            break;
-          case UserStates.UNINITIALISED:
-            authorisationBloc.logInWithLocal();
-            return LoaderSpinkit();
-            //return RegistrationScreen();
-            break;
-          case UserStates.AUTHORISATIONSCREEN:
-            return AuthorisationScreen();
-            break;
-          default:
-            return Scaffold();
-            break;
-        }*/
       },
     );
   }

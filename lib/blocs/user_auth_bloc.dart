@@ -1,16 +1,22 @@
 import 'dart:async';
 import 'package:rxdart/rxdart.dart';
 import 'package:tigra/models/log_and_pas.dart';
+import 'package:tigra/models/user_model.dart';
 import 'package:tigra/repos/app_repository.dart';
 import 'package:tigra/responses/user_response.dart';
 
 class UserAuthorisationBloc {
   final AppRepository repository = AppRepository();
   BehaviorSubject<UserResponse> _controller = BehaviorSubject<UserResponse>();
-  //UserResponse userResponse;
 
-  /*UserAuthorisationBloc() {
-    logInWithLocal();
+  //Registration
+  /*registrate(UserModel user) async {
+    print("Отправляем запрос: ${user.surname} ${user.name}, ${user.userPhoneNumber}");
+    _controller.sink.add(UserLoading());
+    UserResponse response =
+        await repository.registrate(user);
+    print(response);
+    _controller..sink.add(response);
   }*/
 
   logIn(LoginAndPass user) async {
@@ -18,39 +24,38 @@ class UserAuthorisationBloc {
     _controller.sink.add(UserLoading());
     UserResponse response =
         await repository.authorisation(user.login, user.password);
-    /*if (response.user != null) {
-      _controller..sink.add(UserStates.AUTHORISED);
-    } else {
-      _controller..sink.add(UserStates.NONAUTHORISED);
-    }
-    this.userResponse = response;*/
     print(response);
     _controller..sink.add(response);
   }
 
-  /*updateUserState(String phoneNumber) async {
-    //print("Отправляем запрос: ${user.login} : ${user.password}");
+  updateUserState(UserModel user) async {
     _controller.sink.add(UserLoading());
-    UserResponse response = await repository.updateUserState(phoneNumber);
-    /*if (response.user != null) {
-      _controller..sink.add(UserStates.AUTHORISED);
-    } else {
-      _controller..sink.add(UserStates.NONAUTHORISED);
-    }
-    this.userResponse = response;*/
+    int response = await repository.updateUserState(user.userPhoneNumber);
     print(response);
-    _controller..sink.add(response);
-  }*/
+    if (response != -1) {
+      _controller.sink.add(UserLoggedIn({
+        "first_name": user.name,
+        "last_name": user.surname,
+        "phone_number": user.userPhoneNumber,
+        "middle_name": user.middlename,
+        "password": user.password,
+        "visit_counter": response
+      }));
+    } else {
+      return UserLoggedIn({
+        "first_name": user.name,
+        "last_name": user.surname,
+        "phone_number": user.userPhoneNumber,
+        "middle_name": user.middlename,
+        "password": user.password,
+        "visit_counter": user.visits
+      });
+    }
+  }
 
   logInWithLocal() async {
     _controller.sink.add(UserLoading());
     UserResponse response = await repository.localAuthorisation();
-    /*if (response.user != null) {
-      _controller..sink.add(UserStates.AUTHORISED);
-    } else {
-      _controller..sink.add(UserStates.NONAUTHORISED);
-    }
-    this.userResponse = response;*/
     _controller..sink.add(response);
   }
 

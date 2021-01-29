@@ -1,15 +1,17 @@
 import 'dart:ffi';
 import 'dart:math';
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:tigra/blocs/navigation_bloc.dart';
+import 'package:tigra/blocs/registration_bloc.dart';
+import 'package:tigra/elements/loading_spinkit.dart';
 import 'package:tigra/main.dart';
 import 'package:tigra/models/user_model.dart';
 import 'package:tigra/responses/user_response.dart';
 import 'package:tigra/screens/authorisation_screen.dart';
-import 'package:tigra/screens/pre_auth_screen.dart';
 import 'package:tigra/styles/theme.dart';
-import 'package:tigra/widgets/widgets.dart';
+import 'package:tigra/widgets/recovery_code_enter_widget.dart';
 
 class RegistrationScreen extends StatefulWidget {
   @override
@@ -22,6 +24,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _middleNameController = TextEditingController();
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _passController = TextEditingController();
+  final TextEditingController _codeController = TextEditingController();
+  bool _isCodeSended = false;
+
+  final RegistrationBloc registrationBloc = RegistrationBloc();
   UserModel user;
 
   var maskFormatter = new MaskTextInputFormatter(
@@ -46,141 +52,80 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                       style: kTitleTextStyle,
                     ),
                   ),
-                  Column(
-                    children: [
-                      Form(
-                        key: keys.formLoginKeys[4],
-                        child: Container(
-                          height: 50,
-                          width: 240,
-                          padding: EdgeInsets.all(5),
-                          child: TextFormField(
-                            validator: (str) {
-                              if (str.length == 0) {
-                                return "Введите фамилию";
-                              }
-                              return null;
-                            },
-                            controller: _surnameController,
-                            decoration: inputDecor("Фамилия"),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Form(
-                        key: keys.formLoginKeys[5],
-                        child: Container(
-                          height: 50,
-                          width: 240,
-                          padding: EdgeInsets.all(5),
-                          child: TextFormField(
-                            validator: (str) {
-                              if (str.length == 0) {
-                                return "Введите имя";
-                              }
-                              return null;
-                            },
-                            controller: _nameController,
-                            decoration: inputDecor("Имя"),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Form(
-                        key: keys.formLoginKeys[6],
-                        child: Container(
-                          height: 50,
-                          width: 240,
-                          padding: EdgeInsets.all(5),
-                          child: TextFormField(
-                            validator: (str) {
-                              if (str.length > 255) {
-                                return "Введите отчество";
-                              }
-                              return null;
-                            },
-                            controller: _middleNameController,
-                            decoration: inputDecor("Отчество"),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Form(
-                        key: keys.formLoginKeys[7],
-                        child: Container(
-                          height: 50,
-                          width: 240,
-                          padding: EdgeInsets.all(5),
-                          child: TextFormField(
-                            validator: (str) {
-                              if (str.length == 0) {
-                                return "Введите номер телефона";
-                              } else if (str[1] != '7') {
-                                return "Введите номер с кодом +7";
-                              } else {
-                                return null;
-                              }
-                            },
-                            inputFormatters: [maskFormatter],
-                            controller: _phoneNumberController,
-                            decoration: inputDecor("Номер телефона"),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Form(
-                        key: keys.formLoginKeys[8],
-                        child: Container(
-                          height: 50,
-                          width: 240,
-                          padding: EdgeInsets.all(5),
-                          child: TextFormField(
-                            validator: (str) {
-                              if (str.length < 6) {
-                                return "Пароль слишком короткий";
-                              } else if (!str.contains(new RegExp(r'[0-9]'))) {
-                                return "Пороль должен содержать хотя-бы одну цифру";
-                              } else if (!str.contains(new RegExp(r'[a-x]'))) {
-                                return "Пароль должен содержать хотя-бы одну букву латинского алфавита";
-                              } else if (str.length > 32) {
-                                return "Пароль слишком длинный";
-                              } else {
-                                return null;
-                              }
-                            },
-                            controller: _passController,
-                            decoration: inputDecor("Пароль"),
-                          ),
-                        ),
-                      ),
-                    ],
+                  StreamBuilder(
+                    stream: registrationBloc.subject,
+                    builder: (context, AsyncSnapshot<REGSTATE> snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data == REGSTATE.TOREGSCR) {
+                          _isCodeSended = false;
+                          return _registrationTextFields();
+                        } else if (snapshot.data == REGSTATE.LOADING) {
+                          return loadingSpinkit();
+                        } else if (snapshot.data == REGSTATE.CODESENDED) {
+                          _isCodeSended = true;
+                          return CodeEnterWidget(
+                              codeController: _codeController,
+                              key: keys.formLoginKeys[11]);
+                        }
+                      }
+                      return _registrationTextFields();
+                    },
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    child: StreamBuilder(
+                      stream: registrationBloc.subject,
+                      builder: (context, AsyncSnapshot<REGSTATE> snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data == REGSTATE.ERROR) {
+                            _isCodeSended = false;
+                            return AutoSizeText(
+                              "Ошибка сервера, повторите позже",
+                              overflow: TextOverflow.visible,
+                              style: kErrorTextStyle,
+                            );
+                          } else if (snapshot.data == REGSTATE.CODEERROR) {
+                            return AutoSizeText(
+                              "Неверный код",
+                              overflow: TextOverflow.visible,
+                              style: kErrorTextStyle,
+                            );
+                          } else if (snapshot.data == REGSTATE.ALREADYEXIST) {
+                            _isCodeSended = false;
+                            return AutoSizeText(
+                              "Данный номер телефона уже зарегистрирован",
+                              overflow: TextOverflow.visible,
+                              style: kErrorTextStyle,
+                            );
+                          } else if (snapshot.data == REGSTATE.NOUSER) {
+                            _isCodeSended = false;
+                            return AutoSizeText(
+                              "Введите данные пользователя",
+                              overflow: TextOverflow.visible,
+                              style: kErrorTextStyle,
+                            );
+                          }
+                        }
+                        return AutoSizeText(
+                          "",
+                          overflow: TextOverflow.visible,
+                          style: kErrorTextStyle,
+                        );
+                      },
+                    ),
                   ),
                   SizedBox(
                     height: 10,
                   ),
                   GestureDetector(
                     onTap: () {
-                      if (!keys.formLoginKeys[4].currentState.validate() ||
-                          !keys.formLoginKeys[5].currentState.validate() ||
-                          !keys.formLoginKeys[6].currentState.validate() ||
-                          !keys.formLoginKeys[7].currentState.validate() ||
-                          !keys.formLoginKeys[8].currentState.validate()) {
-                        return;
-                      }
-                      user = new UserModel(
-                          _surnameController.text,
-                          _nameController.text,
-                          _middleNameController.text,
-                          _phoneNumberController.text,
-                          _passController.text);
+                      if (_isCodeSended)
+                        _registrationCodeChecking();
+                      else
+                        _registrationCodeSend();
                     },
                     child: Container(
                       height: 41,
@@ -203,5 +148,167 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         ),
       ),
     );
+  }
+
+  Column _registrationTextFields() {
+    return Column(
+      children: [
+        Form(
+          key: keys.formLoginKeys[4],
+          child: Container(
+            height: 50,
+            width: 240,
+            padding: EdgeInsets.all(5),
+            child: TextFormField(
+              validator: (str) {
+                if (str.length == 0) {
+                  return "Введите фамилию";
+                }
+                return null;
+              },
+              controller: _surnameController,
+              decoration: inputDecor("Фамилия"),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Form(
+          key: keys.formLoginKeys[5],
+          child: Container(
+            height: 50,
+            width: 240,
+            padding: EdgeInsets.all(5),
+            child: TextFormField(
+              validator: (str) {
+                if (str.length == 0) {
+                  return "Введите имя";
+                }
+                return null;
+              },
+              controller: _nameController,
+              decoration: inputDecor("Имя"),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Form(
+          key: keys.formLoginKeys[6],
+          child: Container(
+            height: 50,
+            width: 240,
+            padding: EdgeInsets.all(5),
+            child: TextFormField(
+              validator: (str) {
+                if (str.length == 0) {
+                  return "Введите отчество";
+                }
+                return null;
+              },
+              controller: _middleNameController,
+              decoration: inputDecor("Отчество"),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Form(
+          key: keys.formLoginKeys[7],
+          child: Container(
+            height: 50,
+            width: 240,
+            padding: EdgeInsets.all(5),
+            child: TextFormField(
+              validator: (str) {
+                if (str.length < 18) {
+                  return "Слишком короткий номер телефона";
+                } else if (str[1] != '7') {
+                  return "Введите номер с кодом +7";
+                } else {
+                  return null;
+                }
+              },
+              inputFormatters: [maskFormatter],
+              controller: _phoneNumberController,
+              decoration: inputDecor("Номер телефона"),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 15,
+        ),
+        Form(
+          key: keys.formLoginKeys[8],
+          child: Container(
+            height: 50,
+            width: 240,
+            padding: EdgeInsets.all(5),
+            child: TextFormField(
+              validator: (str) {
+                if (str.length < 6) {
+                  return "Пароль слишком короткий";
+                } else if (!str.contains(new RegExp(r'[0-9]'))) {
+                  return "Пороль должен содержать\nхотя-бы одну цифру";
+                } else if (!str.contains(new RegExp(r'[a-x]'))) {
+                  return "Пароль должен содержать хотя-бы\nодну букву латинского алфавита";
+                } else if (str.length > 64) {
+                  return "Пароль слишком длинный";
+                } else {
+                  return null;
+                }
+              },
+              controller: _passController,
+              decoration: inputDecor("Пароль"),
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 20,
+        ),
+        GestureDetector(
+          onTap: _hasAlreadyCode,
+          child: Text(
+            "У меня есть код",
+            style: kHelpBottomTextStyleBlack,
+          ),
+        )
+      ],
+    );
+  }
+
+  void _hasAlreadyCode() async {
+    bool hasUserData = await registrationBloc.hasUserData();
+    if (hasUserData) {
+      registrationBloc.pickItem(REGSTATE.CODESENDED);
+    }
+  }
+
+  void _registrationCodeSend() {
+    bool _first = keys.formLoginKeys[4].currentState.validate();
+    bool _second = keys.formLoginKeys[5].currentState.validate();
+    bool _third = keys.formLoginKeys[6].currentState.validate();
+    bool _fourth = keys.formLoginKeys[7].currentState.validate();
+    bool _fifth = keys.formLoginKeys[8].currentState.validate();
+    if (!_first || !_second || !_third || !_fourth || !_fifth) {
+      return;
+    }
+    user = new UserModel(
+        _surnameController.text,
+        _nameController.text,
+        _middleNameController.text,
+        _phoneNumberController.text,
+        _passController.text);
+    registrationBloc.registrate(user);
+  }
+
+  void _registrationCodeChecking() {
+    if (!keys.formLoginKeys[11].currentState.validate()) {
+      return;
+    }
+    registrationBloc.codeCheck(_codeController.text);
   }
 }

@@ -18,8 +18,8 @@ class _CodeEnterWidgetState extends State<CodeEnterWidget> {
   Widget _timer = SizedBox();
   int _duration = 60;
   bool _timerWorking = false;
-  //var maskFormatter = new MaskTextInputFormatter(
-  // mask: '+# (###) ###-##-##', filter: {"#": RegExp(r'[0-9]')});
+  var maskFormatter = new MaskTextInputFormatter(
+      mask: '######', filter: {"#": RegExp(r'[0-9]')});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -49,11 +49,13 @@ class _CodeEnterWidgetState extends State<CodeEnterWidget> {
               validator: (str) {
                 if (str.length == 0) {
                   return "Введите код";
+                } else if (str.length < 6) {
+                  return "Код слишком короткий";
                 } else {
                   return null;
                 }
               },
-              //inputFormatters: [maskFormatter],
+              inputFormatters: [maskFormatter],
               decoration: inputDecor("Код"),
             ),
           ),

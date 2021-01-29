@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tigra/blocs/recovary_bloc.dart';
 import 'package:tigra/elements/methods.dart';
 import 'package:tigra/models/user_model.dart';
 import 'package:tigra/responses/recovery_response.dart';
@@ -26,14 +25,21 @@ class AppRepository {
       var data = jsonDecode(jdata);
       if (data != null) {
         String isAuth = data["authorized"];
-        if (isAuth != "false") {
+        if (isAuth == "true") {
+          prefs.setString("phone_number", login);
           prefs.setString("first_name", data["profile"]["first_name"]);
           prefs.setString("last_name", data["profile"]["last_name"]);
-          prefs.setInt("visits_counter", data["profile"]["visits_counter"]);
-          prefs.setString("phone_number", login);
+          prefs.setInt("visits_counter", data["profile"]["visit_counter"]);
           prefs.setString("password", password);
           print("Вход осуществлен");
-          return UserLoggedIn(data["profile"]);
+          return UserLoggedIn({
+            "first_name": data["profile"]["first_name"],
+            "last_name": data["profile"]["last_name"],
+            "phone_number": data["profile"]["phone_number"],
+            "middle_name": data["profile"]["middle_name"],
+            "password": password,
+            "visit_counter": data["profile"]["visit_counter"]
+          });
         } else {
           return UserAuthFailed();
         }
@@ -46,25 +52,56 @@ class AppRepository {
     }
   }
 
-  /*Авторизация через локальный shared preferences*/
+  /*Авторизация через локальный shared preferences
+  берется локальный логин и пароль, затем шлется запрос авторизации*/
   Future<UserResponse> localAuthorisation() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String login = prefs.getString("phone_number");
-    String firstName = prefs.getString("first_name");
-    String lastName = prefs.getString("last_name");
-    int visitsCount = prefs.getInt("visits_counter");
+    //String firstName = prefs.getString("first_name");
+    //String lastName = prefs.getString("last_name");
+    //int visitsCount = prefs.getInt("visits_counter");
+    String password = prefs.getString("password");
     try {
-      if (login != null &&
-          firstName != null &&
-          lastName != null &&
-          visitsCount != null) {
-        var data = {
-          "first_name": firstName,
-          "last_name": lastName,
-          "phone_number": login,
-          "visits_counter": visitsCount
-        };
-        return UserLoggedIn(data);
+      if (login != null && password != null) {
+        try {
+          String basicAuth =
+              'Basic ' + base64.encode(utf8.encode("$login:$password"));
+          print(basicAuth);
+          var response = await _dio.get(
+              "https://kids-project-pro.herokuapp.com/account/login/",
+              options: Options(
+                headers: {'authorization': basicAuth},
+              ));
+          var jdata = jsonEncode(response.data);
+          var data = jsonDecode(jdata);
+          if (data != null) {
+            String isAuth = data["authorized"];
+            if (isAuth == "true") {
+              prefs.setString("phone_number", login);
+              prefs.setString("first_name", data["profile"]["first_name"]);
+              prefs.setString("last_name", data["profile"]["last_name"]);
+              prefs.setInt("visits_counter", data["profile"]["visit_counter"]);
+              prefs.setString("password", password);
+              print(data["profile"]["visit_counter"]);
+              print("Вход осуществлен");
+              return UserLoggedIn({
+                "first_name": data["profile"]["first_name"],
+                "last_name": data["profile"]["last_name"],
+                "phone_number": data["profile"]["phone_number"],
+                "middle_name": data["profile"]["middle_name"],
+                "password": password,
+                "visit_counter": data["profile"]["visit_counter"]
+              });
+            } else {
+              return UserAuthFailed();
+            }
+          } else {
+            return UserWithError("Ошибка сервера...");
+          }
+        } catch (error, stck) {
+          print("$error $stck");
+          return UserWithError("Ошибка $error");
+        }
       } else {
         return UserUnAuth();
       }
@@ -74,7 +111,166 @@ class AppRepository {
     }
   }
 
-  /*Выход из аккаунта*/
+  /*Регистрация нового аккаунта
+   Принимает пользователя и сохраняет его данные до проверки кода*/
+  Future<int> registrate(UserModel user) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      String _pNumber = convertToSimplePhoneNumber(user.userPhoneNumber);
+      print(_pNumber);
+      var response = await _dio.get(
+          "https://kids-project-pro.herokuapp.com/verify/time_based/$_pNumber");
+      if (response.statusCode != 200) {
+        return -1;
+      }
+      print(response);
+      var jdata = jsonEncode(response.data);
+      if (jdata is String && jdata == '"Phone number already exists"') {
+        return -2;
+      }
+      var data = jsonDecode(jdata);
+      if (data != null) {
+        if (data["Responded"]["success"] != false) {
+          prefs.setString("reg_user_name", user.name);
+          prefs.setString("reg_user_surname", user.surname);
+          prefs.setString("reg_user_middleName", user.middlename);
+          prefs.setString("reg_user_phone_number", user.userPhoneNumber);
+          prefs.setString("reg_user_password", user.password);
+          prefs.setString("OTPReg", data["OTP"]);
+          return 0;
+        } else {
+          return -1;
+        }
+      } else {
+        return -1;
+      }
+    } catch (error, stck) {
+      print("$error $stck");
+      return -1;
+    }
+  }
+
+  ///Проверяет есть ли пользовательские данные в shared
+  ///и возвращает 0 - если есть, иначе - 1
+  Future<int> ifHasUserRegistrationData() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      var name = prefs.getString("reg_user_name");
+      var surname = prefs.getString("reg_user_surname");
+      var middleName = prefs.getString("reg_user_middleName");
+      var phoneNumber = prefs.getString("reg_user_phone_number");
+      var password = prefs.getString("reg_user_password");
+      var regOtp = prefs.getString("OTPReg");
+      if (name != null &&
+          surname != null &&
+          middleName != null &&
+          phoneNumber != null &&
+          password != null &&
+          regOtp != null) {
+        return 0;
+      } else {
+        return -1;
+      }
+    } catch (error, stck) {
+      print("$error $stck");
+      return -1;
+    }
+  }
+
+  ///Сверяет введенный код с тем, что было сохранено после запроса на отправку кода
+  ///0 если все ок
+  ///-2 - код неверный
+  ///-1 - ошибка
+  Future<int> registrationCodeCheck(String otp) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      var name = prefs.getString("reg_user_name");
+      var surname = prefs.getString("reg_user_surname");
+      var middleName = prefs.getString("reg_user_middleName");
+      var phoneNumber = prefs.getString("reg_user_phone_number");
+      var password = prefs.getString("reg_user_password");
+      var regOtp = prefs.getString("OTPReg");
+      if (name != null &&
+          surname != null &&
+          middleName != null &&
+          phoneNumber != null &&
+          password != null &&
+          regOtp != null) {
+        if (otp == regOtp) {
+          /*Код правильный отправляем запрос*/
+          try {
+            String newStr = convertToSimplePhoneNumber(phoneNumber);
+            print(newStr);
+            var response = await _dio.post(
+                "https://kids-project-pro.herokuapp.com/verify/time_based/$newStr/",
+                data: FormData.fromMap({
+                  'otp': regOtp,
+                  'first_name': name,
+                  'last_name': surname,
+                  'password': password,
+                  'middle_name': middleName
+                }));
+            print(response);
+            if (response.statusCode != 200) {
+              return -1;
+            }
+            var jdata = jsonEncode(response.data);
+            print(jdata);
+            if (jdata is String && jdata == '"OTP is wrong/expired"') {
+              return -2;
+            } else {
+              return 0;
+            }
+          } catch (error, stck) {
+            print("$error $stck");
+            return -1;
+          }
+        } else {
+          /*Код неверный, возврат*/
+          return -2;
+        }
+      } else
+        return -1;
+    } catch (error, stck) {
+      print("$error $stck");
+      return -1;
+    }
+  }
+
+  ///Возвращает пользователя если его данные были сохранены в ходе регистрации в
+  ///shared prefs
+  Future<UserResponse> getUserFromLocalRegistration() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      var name = prefs.getString("reg_user_name");
+      var surname = prefs.getString("reg_user_surname");
+      var middleName = prefs.getString("reg_user_middleName");
+      var phoneNumber = prefs.getString("reg_user_phone_number");
+      var password = prefs.getString("reg_user_password");
+      var regOtp = prefs.getString("OTPReg");
+      if (name != null &&
+          surname != null &&
+          middleName != null &&
+          phoneNumber != null &&
+          password != null &&
+          regOtp != null) {
+        return UserLoggedIn({
+          "first_name": name,
+          "last_name": surname,
+          "middle_name": middleName,
+          "phone_number": phoneNumber,
+          "password": password,
+          "visit_counter": 0
+        });
+      } else
+        return UserUnAuth();
+    } catch (error, stck) {
+      print("$error $stck");
+      return UserUnAuth();
+    }
+  }
+
+  ///Выход из аккаунта
   Future<UserResponse> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove("phone_number");
@@ -85,39 +281,35 @@ class AppRepository {
     return UserUnAuth();
   }
 
-  /*Обновление данных*/
-  Future<UserResponse> updateUserState(String phoneNumber) async {
+  ///Обновление данных
+  Future<int> updateUserState(String phoneNumber) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       /*String basicAuth = 'Basic ' +
           base64.encode(utf8.encode("${user.userPhoneNumber}:${user.}"));
       print(basicAuth);*/
-      String newStr = convertToSimplePhoneNumber(phoneNumber);
+      String _pNumber = convertToSimplePhoneNumber(phoneNumber);
       var response = await _dio.get(
-        "https://kids-project-pro.herokuapp.com/account/visits/$newStr",
+        "https://kids-project-pro.herokuapp.com/account/visits/$_pNumber",
       );
       print(response.data);
       var jdata = jsonEncode(response.data);
       var data = jsonDecode(jdata);
       print(jdata);
       if (data != null) {
-        //prefs.setString("first_name", data["profile"]["first_name"]);
-        //prefs.setString("last_name", data["profile"]["last_name"]);
-        prefs.setInt("visits_counter", data["profile"]["visits"]);
-        //prefs.setString("phone_number", login);
-        //prefs.setString("password", password);
+        prefs.setInt("visits_counter", data["visits"]);
         print("Вход осуществлен");
-        return UserLoggedIn(data["profile"]);
+        return data["visits"];
       } else {
-        return UserWithError("Ошибка сервера...");
+        return -1;
       }
     } catch (error, stck) {
       print("$error $stck");
-      return UserWithError("Ошибка $error");
+      return -1;
     }
   }
 
-  /*Проверка кода */
+  ///Проверка кода
   Future<RecoveryResponse> codeCheck(String phoneNumber, String code) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
@@ -136,18 +328,10 @@ class AppRepository {
       } else {
         return RecoveryResponseServerError("Код неверный");
       }
-      /*if (data["Responded"]["success"] != false) {
-        print("");
-        return RecoveryResponseCodeSended();
-      } else {
-        return RecoveryResponseServerError(
-            data["Responded"]["message"]); /*"Ошибка сервера..."*/
-      }*/
     } catch (error, stck) {
       print("$error $stck");
       return RecoveryResponseServerError(error.toString()); /*"Ошибка $error"*/
     }
-    //return Future.delayed(Duration(seconds: 1), () => RecoveryResponseOk());
   }
 
   Future<bool> codeCheckBool(String phoneNumber, String code) async {
@@ -167,13 +351,6 @@ class AppRepository {
       } else {
         return false;
       }
-      /*if (data["Responded"]["success"] != false) {
-        print("");
-        return RecoveryResponseCodeSended();
-      } else {
-        return RecoveryResponseServerError(
-            data["Responded"]["message"]); /*"Ошибка сервера..."*/
-      }*/
     } catch (error, stck) {
       print("$error $stck");
       return false;
@@ -201,16 +378,16 @@ class AppRepository {
       var jdata = jsonEncode(response.data);
       var data = jsonDecode(jdata);
       print(jdata);
-      if (jdata == '"Phone number is not registered"') {
-        return RecoveryResponseServerError("Номер телефона не найден");
-      }
       if (response.statusCode != 200) {
         return RecoveryResponseServerError("Связь с сервером потеряна");
+      }
+      if (jdata is String && jdata == '"Phone number is not registered"') {
+        return RecoveryResponseServerError("Номер телефона не найден");
       }
       if (data["Responded"]["success"] != false) {
         count++;
         prefs.setString("otp", data["OTP"]);
-        prefs.setString("last_time_send", data["Responded"]["data"]);
+        prefs.setString("last_time_send", DateTime.now().toString());
         prefs.setInt("count_send", count);
         print("Вход осуществлен");
         return RecoveryResponseCodeSended();
@@ -246,18 +423,9 @@ class AppRepository {
       } else {
         return RecoveryResponseServerError("Код неверный");
       }
-      /*if (data["Responded"]["success"] != false) {
-        print("");
-        return RecoveryResponseCodeSended();
-      } else {
-        return RecoveryResponseServerError(
-            data["Responded"]["message"]); /*"Ошибка сервера..."*/
-      }*/
     } catch (error, stck) {
       print("$error $stck");
       return RecoveryResponseServerError(error.toString()); /*"Ошибка $error"*/
     }
-    /*return Future.delayed(
-        Duration(seconds: 1), () => RecoveryResponsePassChanged());*/
   }
 }
