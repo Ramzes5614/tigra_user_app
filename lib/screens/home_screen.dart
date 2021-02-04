@@ -1,4 +1,3 @@
-//import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +8,8 @@ import 'package:Tigra/screens/qr_code_screen.dart';
 import 'package:Tigra/styles/theme.dart';
 import 'package:Tigra/widgets/widgets.dart';
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter_icomoon_icons/flutter_icomoon_icons.dart';
+import 'dart:math' as math;
 
 class HomeSchreen extends StatefulWidget {
   final UserModel user;
@@ -26,199 +27,206 @@ class _HomeSchreenState extends State<HomeSchreen> {
     } else {
       _visitsToFree = 5 - (widget.user.visits % 5) - 1;
     }
-    return WillPopScope(
-      onWillPop: () => showCustDialog(context),
-      child: Scaffold(
-          appBar: MainAppBar(
-            text: Text(
-              "${widget.user.name}",
-              style: kSurnameTextStyleWhite,
-            ),
-            button: TextButton(
-              onPressed: () => {showCustDialog(context)},
-              //authorisationBloc.updateUserState(widget.user.userPhoneNumber);
-              //} /*() => authorisationBloc..logOut()*/,
-              child: Container(
-                height: 36,
-                width: 36,
-                decoration: kAppBarBottomBoxDecoration,
-                child: Icon(
-                  Icons.arrow_back,
-                  color: kBoxBlackColor,
-                  size: 18.5,
+    return SafeArea(
+      child: WillPopScope(
+        onWillPop: () => showCustDialog(context),
+        child: Scaffold(
+            appBar: MainAppBar(
+              text: Text(
+                "${widget.user.name}",
+                style: kSurnameTextStyleWhite,
+              ),
+              button: TextButton(
+                onPressed: () => {showCustDialog(context)},
+                //authorisationBloc.updateUserState(widget.user.userPhoneNumber);
+                //} /*() => authorisationBloc..logOut()*/,
+                child: AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    height: 36,
+                    width: 36,
+                    decoration: kAppBarBottomBoxDecoration,
+                    child: Transform(
+                      alignment: Alignment.center,
+                      transform: Matrix4.rotationY(math.pi),
+                      child: Icon(
+                        IcoMoonIcons.exit,
+                        color: kBoxBlackColor,
+                        size: 18,
+                      ),
+                    ),
+                  ),
                 ),
               ),
+              height: 56,
             ),
-            height: 150,
-          ),
-          backgroundColor: themeLight.scaffoldBackgroundColor,
-          body: Container(
-            padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          padding: EdgeInsets.fromLTRB(0, 0, 0, 24),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              AutoSizeText(
-                                "${widget.user.name}",
-                                style: kNameTextStyle,
-                              ),
-                              SizedBox(
-                                height: 1,
-                              ),
-                              AutoSizeText(
-                                "${widget.user.surname}",
-                                style: kSurnameTextStyle,
-                              ),
-                              Container(
-                                padding: EdgeInsets.only(top: 24),
-                                child: AutoSizeText(
-                                  "${convertFromSimplePhoneNumber(widget.user.userPhoneNumber)}",
-                                  style: kSurnameTextStyle,
-                                ),
-                              )
-                            ],
+            backgroundColor: themeLight.scaffoldBackgroundColor,
+            body: Container(
+              padding: EdgeInsets.fromLTRB(30, 60, 30, 50),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    //mainAxisAlignment: MainAxisAlignment.start,
+                    //crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          AutoSizeText(
+                            "${widget.user.name}",
+                            style: kNameTextStyle,
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Flexible(
-                      child: AutoSizeText("До бесплатного посещения:",
-                          overflow: TextOverflow.visible,
-                          style: kSurnameTextStyle),
-                    ),
-                    Flexible(
-                      child: AutoSizeText(
-                        "$_visitsToFree",
-                        style: kVisitsNumberTextStyle,
+                          AutoSizeText(
+                            "${widget.user.surname}",
+                            style: kSurnameTextStyle,
+                          ),
+                          AutoSizeText(
+                            "${widget.user.middlename}",
+                            style: kKidNameTextStyle,
+                          ),
+                          SizedBox(
+                            height: 20,
+                          ),
+                          AutoSizeText(
+                            "${convertFromSimplePhoneNumber(widget.user.userPhoneNumber)}",
+                            style: kSurnameTextStyle,
+                          )
+                        ],
                       ),
-                    )
-                  ],
-                ),
-                Flexible(child: CircleVisits(widget.user.visits)),
-                Padding(
-                  padding: EdgeInsets.all(30),
-                  child: Column(children: [
-                    Container(
-                        height: 41,
-                        width: 300,
-                        child: _visitsToFree == 0
-                            ? AutoSizeText(
-                                "Бесплатное посещение!",
-                                style: kVisitsTextStyle,
-                              )
-                            : Text("")),
-                    GestureDetector(
-                      onTap: () =>
-                          /*{
-                        authorisationBloc.pickState(UserToQrScreen(widget.user))
-                      },*/
-                          Navigator.of(context).push(new MaterialPageRoute(
-                              builder: (context) => QrCodeScreen(
-                                    user: widget.user,
-                                  )))
-                      /*.then(authorisationBloc.updateUserState(
-                                  widget.user.userPhoneNumber))*/
-                      ,
-                      /*navigatorBloc.pickNavigator(NavigatorMenu.QrScreen)*/
-                      child: Container(
-                        //padding: EdgeInsets.all(50),
-                        height: 41,
-                        width: 240,
-                        decoration: kOrangeBoxDecorationOrangeBorder,
-                        child: Align(
+                    ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Container(
+                        child: Flexible(
+                          child: AutoSizeText("До бесплатного\nосталось:",
+                              overflow: TextOverflow.visible,
+                              style: kPreVisitsTextStyle),
+                        ),
+                      ),
+                      Container(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            AutoSizeText(
+                              "$_visitsToFree",
+                              style: kVisitsNumberTextStyle,
+                              maxFontSize: 144,
+                            ),
+                            AutoSizeText(
+                              getVisitsCountString(_visitsToFree),
+                              style: kAfterNumTextStyle,
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  CircleVisits(widget.user.visits),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
                           alignment: Alignment.center,
-                          child: AutoSizeText(
-                            "Новое посещение",
-                            style: kBottomTextStyleWhite,
+                          height: 41,
+                          width: 300,
+                          child: _visitsToFree == 0
+                              ? AutoSizeText(
+                                  "Бесплатное посещение!",
+                                  style: kVisitsTextStyle,
+                                )
+                              : Text("")),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      GestureDetector(
+                        onTap: () =>
+                            Navigator.of(context).push(new MaterialPageRoute(
+                                builder: (context) => QrCodeScreen(
+                                      user: widget.user,
+                                    ))),
+                        child: Container(
+                          height: 41,
+                          width: 240,
+                          decoration: kOrangeBoxDecorationOrangeBorder,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: AutoSizeText(
+                              "Новое посещение",
+                              style: kBottomTextStyleWhite,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ]),
-                )
-              ],
-            ),
-          )),
+                    ],
+                  ),
+                  /*Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(children: [
+                      Container(
+                          height: 41,
+                          width: 300,
+                          child: _visitsToFree == 0
+                              ? AutoSizeText(
+                                  "Бесплатное посещение!",
+                                  style: kVisitsTextStyle,
+                                )
+                              : Text("")),
+                      GestureDetector(
+                        onTap: () =>
+                            Navigator.of(context).push(new MaterialPageRoute(
+                                builder: (context) => QrCodeScreen(
+                                      user: widget.user,
+                                    ))),
+                        child: Container(
+                          height: 41,
+                          width: 240,
+                          decoration: kOrangeBoxDecorationOrangeBorder,
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: AutoSizeText(
+                              "Новое посещение",
+                              style: kBottomTextStyleWhite,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ]),
+                  )*/
+                ],
+              ),
+            )),
+      ),
     );
   }
 
-  Future showCustDialog(BuildContext context) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return Container(
-            height: 165,
-            width: 240,
-            child: AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 20,
-              content: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Выйти из аккаунта",
-                  style: kNameTextStyle,
-                ),
-              ),
-              //actionsOverflowButtonSpacing: 40,
-              actionsPadding: EdgeInsets.all(20),
-              actions: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
-                      height: 46,
-                      width: 90,
-                      decoration: kOrangeBoxDecorationOrangeBorder,
-                      child: Align(
-                          alignment: Alignment.center,
-                          child: Text("Нет", style: kConfirmTextStyle)),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 25,
-                ),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                      authorisationBloc.logOut();
-                    },
-                    child: Container(
-                      height: 46,
-                      width: 90,
-                      decoration: kWhiteBoxDecorationBlackBorder,
-                      child: Align(
-                          alignment: Alignment.center,
-                          child: Text("Да", style: kConfirmTextStyle)),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          );
-        });
+  String getVisitsCountString(int n) {
+    String retStr;
+    switch (n) {
+      case 0:
+        retStr = "посещений";
+        break;
+      case 1:
+        retStr = "посещение";
+        break;
+      case 2:
+        retStr = "посещения";
+        break;
+      case 3:
+        retStr = "посещения";
+        break;
+      case 4:
+        retStr = "посещения";
+        break;
+      default:
+        retStr = "Посещений";
+        break;
+    }
+    return retStr;
   }
 }

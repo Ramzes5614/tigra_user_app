@@ -4,6 +4,7 @@ ThemeData themeLight = ThemeData(
     backgroundColor: Color(0xFFE5E5E5),
     appBarTheme: AppBarTheme(color: Color(0xFF171717)));
 
+const kBackGroundColor = Color(0xFFFFFFFF);
 const kBottomColorOrange = Color(0xFFFF8B20);
 const kBottomColorWhite = Color(0xFFFFFFFF);
 const kBoxBlackColor = Color(0xFF171717);
@@ -13,10 +14,21 @@ const kOrangeCircleColor = Color(0xFFFF8B20);
 const String assetName = 'assets/images/tiger.svg';
 
 const kConfirmTextStyle = TextStyle(
+  fontFamily: "roboto",
+  fontSize: 26,
+  color: Color(0xFF171717),
+  fontWeight: FontWeight.w400,
+);
+const kConfirmButtonTextStyle = TextStyle(
     fontFamily: "roboto",
     fontSize: 16,
     color: Color(0xFF171717),
-    fontWeight: FontWeight.normal);
+    fontWeight: FontWeight.w700);
+const kConfirmButtonTextStyleWhite = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 16,
+    color: Colors.white,
+    fontWeight: FontWeight.w700);
 const kCircleTextStyle = TextStyle(
     fontFamily: "roboto",
     fontSize: 18,
@@ -31,7 +43,7 @@ const kBottomTextStyleWhite = TextStyle(
     fontFamily: "roboto",
     fontSize: 18,
     color: Color(0xFFFFFFFF),
-    fontWeight: FontWeight.bold);
+    fontWeight: FontWeight.w700);
 const kHelpBottomTextStyleBlack = TextStyle(
     fontFamily: "roboto",
     fontSize: 18,
@@ -41,7 +53,7 @@ const kTitleTextStyle = TextStyle(
     fontFamily: "roboto",
     fontSize: 36,
     color: Color(0xFF171717),
-    fontWeight: FontWeight.normal);
+    fontWeight: FontWeight.w400);
 const kHintTextStyle = TextStyle(
     fontFamily: "roboto",
     fontSize: 36,
@@ -57,31 +69,51 @@ const kNameTextStyle = TextStyle(
     fontSize: 26,
     color: Color(0xFF171717),
     fontWeight: FontWeight.normal);
+const kKidNameTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 18,
+    color: kGreenCircleColor,
+    fontWeight: FontWeight.w400);
 const kSurnameTextStyle = TextStyle(
     fontFamily: "roboto",
     fontSize: 18,
     color: Color(0xFF171717),
-    fontWeight: FontWeight.normal);
+    fontWeight: FontWeight.w400);
+const kHelperTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 18,
+    color: Color(0xFF171717),
+    fontWeight: FontWeight.w400);
 const kSurnameTextStyleWhite = TextStyle(
     fontFamily: "roboto",
     fontSize: 18,
     color: Color(0xFFFFFFFF),
-    fontWeight: FontWeight.normal);
+    fontWeight: FontWeight.w400);
+const kPreVisitsTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 18,
+    color: Color(0xFF171717),
+    fontWeight: FontWeight.w400);
 const kVisitsNumberTextStyle = TextStyle(
     fontFamily: "roboto",
     fontSize: 144,
     color: Color(0xFFFF8B20),
-    fontWeight: FontWeight.normal);
+    fontWeight: FontWeight.bold);
 const kVisitsTextStyle = TextStyle(
     fontFamily: "roboto",
     fontSize: 18,
     color: Color(0xFFFF8B20),
-    fontWeight: FontWeight.normal);
+    fontWeight: FontWeight.w400);
 const kDoubleSendTextStyle = TextStyle(
     fontFamily: "roboto",
     fontSize: 15,
     color: Color(0xFFFF8B20),
     fontWeight: FontWeight.normal);
+const kAfterNumTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 21,
+    color: Color(0xFFFF8B20),
+    fontWeight: FontWeight.w700);
 BoxDecoration kOrangeBoxDecorationOrangeBorder = BoxDecoration(
     color: Color(0xFFFF8B20),
     borderRadius: BorderRadius.circular(6),
@@ -106,22 +138,29 @@ BoxDecoration kWhiteBoxDecorationBlackBorder = BoxDecoration(
 BoxDecoration kCircleDecoration = BoxDecoration(shape: BoxShape.circle);
 BoxDecoration kAppBarBottomBoxDecoration = BoxDecoration(
     color: Color(0xFFFFFFFF),
-    borderRadius: BorderRadius.circular(6),
+    borderRadius: BorderRadius.all(Radius.circular(6)),
+    shape: BoxShape.rectangle,
     border: Border.all(
       color: Color(0xFFFFFFFF),
-      width: 3.0,
+      //width: 0,
     ));
 
 const String helperText =
     "Если вы уверены в правильности набранного пароля и номера телефона при входе, либо возникли сложности при регистрации, вы можете связаться с администрацией в ближайшем ИЦ либо через:";
 const String helperTextContacts =
     "mail@tigra-kzn.ru\n+7 843 249 59 62\n+7 927 249 59 62";
-
+const String qrCodeText =
+    "Покажите QR-код сотруднику детского игрового центра на кассе для считывания. После считывания мы зачтём посещение для участия в акции";
 const kHelperContactsTextStyle = TextStyle(
     fontFamily: "roboto",
     fontSize: 18,
     color: kBoxBlackColor,
-    fontWeight: FontWeight.bold);
+    fontWeight: FontWeight.w700);
+const kHelperButtonTextStyle = TextStyle(
+    fontFamily: "roboto",
+    fontSize: 15,
+    color: kBoxBlackColor,
+    fontWeight: FontWeight.w700);
 
 class AppKeys {
   static final keys0 = GlobalKey<FormState>(debugLabel: '_auth_login');
@@ -142,25 +181,6 @@ class AppKeys {
       GlobalKey<FormState>(debugLabel: '_code_enter_reg_screen');
   static final keys12 =
       GlobalKey<FormState>(debugLabel: '_passchange_screen_phone');
-
-  /*List<GlobalKey<FormState>> formLoginKeys = [
-    GlobalKey<FormState>(), //0 - авторизация - логин
-    GlobalKey<FormState>(), //1 - авторизация - пароль
-    /*********************************************/
-    GlobalKey<FormState>(), //2 - изменение пароля - 1
-    GlobalKey<FormState>(), //3 - изменение пароля - 2
-    /*********************************************/
-    GlobalKey<FormState>(), //4 - регистрация - фамилия
-    GlobalKey<FormState>(), //5 - регистрация - имя
-    GlobalKey<FormState>(), //6 - регистрация - отчество
-    GlobalKey<FormState>(), //7 - регистрация - телефон
-    GlobalKey<FormState>(), //8 - регистрация - пароль
-    GlobalKey<FormState>(), //9 - ввод кода - регистрация
-    GlobalKey<FormState>(), //10 - ввод кода
-    GlobalKey<FormState>(), //11 - ввод кода экран регистрации
-    GlobalKey<FormState>() //12 - изменение пароля - телефон
-  ];*/
-  //final GlobalKey<FormFieldState> txtEmailKey = GlobalKey<FormFieldState>();
 }
 
 AppKeys keys = AppKeys();

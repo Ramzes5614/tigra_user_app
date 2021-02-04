@@ -12,7 +12,7 @@ class PhoneEnterContainer extends StatefulWidget {
 
 class _PhoneEnterContainerState extends State<PhoneEnterContainer> {
   var maskFormatter = new MaskTextInputFormatter(
-      mask: '+# (###) ###-##-##', filter: {"#": RegExp(r'[0-9]')});
+      mask: '+7 (###) ###-##-##', filter: {"#": RegExp(r'[0-9]')});
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +48,8 @@ class _PhoneEnterContainerState extends State<PhoneEnterContainer> {
                 },
                 inputFormatters: [maskFormatter],
                 decoration: inputDecor("Номер телефона"),
+                textAlign: TextAlign.center,
+                textAlignVertical: TextAlignVertical.bottom,
               ),
             ),
           ),

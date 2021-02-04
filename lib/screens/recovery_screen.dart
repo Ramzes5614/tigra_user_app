@@ -24,6 +24,8 @@ class _RecoveryScreen extends State<RecoveryScreen> {
   String _btnText = "Далее";
   @override
   Widget build(BuildContext context) {
+    Size _size = MediaQuery.of(context).size;
+    double _statusBar = MediaQuery.of(context).padding.top;
     return SafeArea(
       child: WillPopScope(
         onWillPop: () {
@@ -39,101 +41,109 @@ class _RecoveryScreen extends State<RecoveryScreen> {
           return null;
         },
         child: Scaffold(
-          body: Container(
-            width: MediaQuery.of(context).size.width,
-            //alignment: Alignment.center,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Flexible(
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: AutoSizeText(
-                      "Восстановить пароль",
-                      style: kTitleTextStyle,
-                    ),
-                  ),
-                ),
-                StreamBuilder(
-                  initialData: recoveryBloc.defaultItem,
-                  stream: recoveryBloc.subject.stream,
-                  builder: (context, AsyncSnapshot<RecoveryResponse> snapshot) {
-                    if (snapshot.hasData) {
-                      ///to phone enter screen
-                      if (snapshot.data is RecoveryResponseToPhoneEnter) {
-                        return PhoneEnterContainer(_controller);
-
-                        ///code sended
-                      } else if (snapshot.data is RecoveryResponseCodeSended) {
-                        return CodeEnterWidget(
-                            codeController: _controller,
-                            onTapF: () => recoveryBloc.didNotCame());
-                      }
-
-                      ///checking the code
-                      else if (snapshot.data is RecoveryResponseCodeChecking) {
-                        return loadingSpinkit();
-                      }
-
-                      ///code checked
-                      else if (snapshot.data is RecoveryResponseOk) {
-                        return PassChangeContainer(
-                            _firstPassController, _secondPassController);
-                      } else if (snapshot.data is RecoveryResponsePassChanged) {
-                        Navigator.pop(context);
-                      } else if (snapshot.data is RecoveryResponseCodeError) {
-                        return CodeEnterWidget(
-                            codeController: _controller,
-                            onTapF: () => recoveryBloc.didNotCame());
-                      }
-                      /*else if (snapshot.data
-                          is RecoveryResponseCodeDidNotCome) {
-                        //return PhoneEnterContainer(_controller);
-                        return CodeEnterWidget(codeController: _controller);
-                      }*/
-                    }
-                    return PhoneEnterContainer(_controller);
-                  },
-                ),
-                StreamBuilder<RecoveryResponse>(
-                    stream: recoveryBloc.subject.stream,
-                    builder:
-                        (context, AsyncSnapshot<RecoveryResponse> snapshot) {
-                      if (snapshot.data is RecoveryResponseCodeError) {
-                        return AutoSizeText(
-                          snapshot.data.error,
-                          style: kErrorTextStyle,
-                          overflow: TextOverflow.visible,
-                        );
-                      } else if (snapshot.data is RecoveryResponseServerError) {
-                        return AutoSizeText(
-                          snapshot.data.error,
-                          style: kErrorTextStyle,
-                          overflow: TextOverflow.visible,
-                        );
-                      }
-                      return Text(
-                        "",
-                        style: kErrorTextStyle,
-                      );
-                    }),
-                GestureDetector(
-                  onTap: bottomButtonTap,
-                  child: Container(
-                    height: 41,
-                    width: 240,
-                    decoration: kOrangeBoxDecorationOrangeBorder,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        _btnText,
-                        style: kBottomTextStyleWhite,
+          body: SingleChildScrollView(
+            child: Container(
+              width: _size.width,
+              height: _size.height - _statusBar,
+              //alignment: Alignment.center,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  Flexible(
+                    child: Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: AutoSizeText(
+                        "Восстановить пароль",
+                        style: kTitleTextStyle,
                       ),
                     ),
                   ),
-                )
-              ],
+                  StreamBuilder(
+                    initialData: recoveryBloc.defaultItem,
+                    stream: recoveryBloc.subject.stream,
+                    builder:
+                        (context, AsyncSnapshot<RecoveryResponse> snapshot) {
+                      if (snapshot.hasData) {
+                        ///to phone enter screen
+                        if (snapshot.data is RecoveryResponseToPhoneEnter) {
+                          return PhoneEnterContainer(_controller);
+
+                          ///code sended
+                        } else if (snapshot.data
+                            is RecoveryResponseCodeSended) {
+                          return CodeEnterWidget(
+                              codeController: _controller,
+                              onTapF: () => recoveryBloc.didNotCame());
+                        }
+
+                        ///checking the code
+                        else if (snapshot.data
+                            is RecoveryResponseCodeChecking) {
+                          return loadingSpinkit();
+                        }
+
+                        ///code checked
+                        else if (snapshot.data is RecoveryResponseOk) {
+                          return PassChangeContainer(
+                              _firstPassController, _secondPassController);
+                        } else if (snapshot.data
+                            is RecoveryResponsePassChanged) {
+                          Navigator.pop(context);
+                        } else if (snapshot.data is RecoveryResponseCodeError) {
+                          return CodeEnterWidget(
+                              codeController: _controller,
+                              onTapF: () => recoveryBloc.didNotCame());
+                        }
+                        /*else if (snapshot.data
+                            is RecoveryResponseCodeDidNotCome) {
+                          //return PhoneEnterContainer(_controller);
+                          return CodeEnterWidget(codeController: _controller);
+                        }*/
+                      }
+                      return PhoneEnterContainer(_controller);
+                    },
+                  ),
+                  StreamBuilder<RecoveryResponse>(
+                      stream: recoveryBloc.subject.stream,
+                      builder:
+                          (context, AsyncSnapshot<RecoveryResponse> snapshot) {
+                        if (snapshot.data is RecoveryResponseCodeError) {
+                          return AutoSizeText(
+                            snapshot.data.error,
+                            style: kErrorTextStyle,
+                            overflow: TextOverflow.visible,
+                          );
+                        } else if (snapshot.data
+                            is RecoveryResponseServerError) {
+                          return AutoSizeText(
+                            snapshot.data.error,
+                            style: kErrorTextStyle,
+                            overflow: TextOverflow.visible,
+                          );
+                        }
+                        return Text(
+                          "",
+                          style: kErrorTextStyle,
+                        );
+                      }),
+                  GestureDetector(
+                    onTap: bottomButtonTap,
+                    child: Container(
+                      height: 41,
+                      width: 240,
+                      decoration: kOrangeBoxDecorationOrangeBorder,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          _btnText,
+                          style: kBottomTextStyleWhite,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),

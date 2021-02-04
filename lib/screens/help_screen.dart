@@ -49,33 +49,41 @@ class _HelpScreenState extends State<HelpScreen> {
                     ],
                   ),
                 ),
-                GestureDetector(
-                  child: Text("Восстановить пароль",
-                      style: kHelperContactsTextStyle),
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => RecoveryScreen()));
-                  },
-                ),
-                GestureDetector(
-                  onTap: () {
-                    authorisationBloc.pickState(ToAuthScr());
-                  },
-                  child: Container(
-                    height: 41,
-                    width: 240,
-                    decoration: kWhiteBoxDecorationBlackBorder.copyWith(
-                        color: kBoxBlackColor),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Назад",
-                        style: kBottomTextStyleWhite,
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GestureDetector(
+                      child: Text("Восстановить пароль",
+                          style: kHelperButtonTextStyle),
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RecoveryScreen()));
+                      },
+                    ),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        authorisationBloc.pickState(ToAuthScr());
+                      },
+                      child: Container(
+                        height: 41,
+                        width: 240,
+                        decoration: kWhiteBoxDecorationBlackBorder.copyWith(
+                            color: kBoxBlackColor),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Назад",
+                            style: kBottomTextStyleWhite,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 )
               ],
             ),

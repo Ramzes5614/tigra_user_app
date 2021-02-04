@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:Tigra/blocs/user_auth_bloc.dart';
 import 'package:Tigra/styles/theme.dart';
@@ -78,17 +80,11 @@ class VisitsColumn extends StatelessWidget {
 
   List<Widget> getCheckBoxColumn() {
     List<Widget> list = List<Widget>();
-    /*for (int i = 0; i < 5 - remainder; i++) {
-      list.add(Expanded(
-        child: Icon(Icons.check_box_outline_blank_rounded),
-      ));
-    }*/
     list.add(MyIcon());
     list.add(MyIcon());
     list.add(MyIcon());
     list.add(MyIcon());
     list.add(MyIcon());
-
     return list;
   }
 
@@ -100,7 +96,7 @@ class VisitsColumn extends StatelessWidget {
   }
 }
 
-class CostomTextField extends StatefulWidget {
+/*class CostomTextField extends StatefulWidget {
   final TextEditingController controller;
   final String hintText;
   CostomTextField(this.controller, this.hintText);
@@ -128,7 +124,7 @@ class _CostomTextFieldState extends State<CostomTextField> {
       style: TextStyle(color: Colors.white, fontSize: 16),
     );
   }
-}
+}*/
 
 class CircleVisits extends StatefulWidget {
   final int _visits;
@@ -223,4 +219,74 @@ class _CircleVisitsState extends State<CircleVisits> {
       ],
     );
   }
+}
+
+Future showCustDialog(BuildContext context) {
+  return showDialog(
+      context: context,
+      builder: (context) {
+        return BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+          child: Container(
+            height: 165,
+            width: 230,
+            child: AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              elevation: 20,
+              content: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "Выйти из аккаунта",
+                  style: kConfirmTextStyle,
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              //actionsOverflowButtonSpacing: 40,
+              actionsPadding: EdgeInsets.all(20),
+              actions: [
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      height: 46,
+                      width: 90,
+                      decoration: kOrangeBoxDecorationOrangeBorder,
+                      child: Align(
+                          alignment: Alignment.center,
+                          child:
+                              Text("Нет", style: kConfirmButtonTextStyleWhite)),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 25,
+                ),
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: GestureDetector(
+                    onTap: () {
+                      authorisationBloc.logOut();
+                      Navigator.pop(context);
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      height: 46,
+                      width: 90,
+                      decoration: kWhiteBoxDecorationBlackBorder,
+                      child: Align(
+                          alignment: Alignment.center,
+                          child: Text("Да", style: kConfirmButtonTextStyle)),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      });
 }

@@ -43,20 +43,26 @@ class _CodeEnterWidgetState extends State<CodeEnterWidget> {
           ),
           Form(
             key: AppKeys.keys10,
-            child: TextFormField(
-              //initialValue: "+79033064659",
-              controller: widget.codeController,
-              validator: (str) {
-                if (str.length == 0) {
-                  return "Введите код";
-                } else if (str.length < 6) {
-                  return "Код слишком короткий";
-                } else {
-                  return null;
-                }
-              },
-              inputFormatters: [maskFormatter],
-              decoration: inputDecor("Код"),
+            child: Container(
+              width: 240,
+              height: 41,
+              child: TextFormField(
+                //initialValue: "+79033064659",
+                controller: widget.codeController,
+                validator: (str) {
+                  if (str.length == 0) {
+                    return "Введите код";
+                  } else if (str.length < 6) {
+                    return "Код слишком короткий";
+                  } else {
+                    return null;
+                  }
+                },
+                inputFormatters: [maskFormatter],
+                decoration: inputDecor("Код"),
+                textAlign: TextAlign.center,
+                textAlignVertical: TextAlignVertical.bottom,
+              ),
             ),
           ),
           SizedBox(

@@ -14,6 +14,7 @@ class _LogoScreenState extends State<LogoScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: kBackGroundColor,
         body: Center(
             child: SingleChildScrollView(
           child: Column(
@@ -65,7 +66,15 @@ class _LogoScreenState extends State<LogoScreen> {
                     ),
                   ),
                 ),
-              )
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              GestureDetector(
+                  onTap: () {
+                    authorisationBloc.pickState(UserToHelp());
+                  },
+                  child: Text("Помощь", style: kHelpBottomTextStyleBlack)),
             ],
           ),
         )),

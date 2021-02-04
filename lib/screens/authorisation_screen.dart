@@ -15,7 +15,7 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
   //final passKey = GlobalKey<FormState>();
   LoginAndPass userLP = LoginAndPass();
   var maskFormatter = new MaskTextInputFormatter(
-      mask: '+# (###) ###-##-##', filter: {"#": RegExp(r'[0-9]')});
+      mask: '+7 (###) ###-##-##', filter: {"#": RegExp(r'[0-9]')});
 
   TextEditingController _loginController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -23,116 +23,124 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
   Widget build(BuildContext context) {
     //_loginController.value = TextEditingValue(text: "+79033064659");
     //_passwordController.value = TextEditingValue(text: "Google5656");
-    return Scaffold(
-      body: WillPopScope(
-        onWillPop: () => authorisationBloc.pickState(UserUnAuth()),
-        child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              child: Container(
-                alignment: Alignment.center,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Text(
-                      "Вход",
-                      style: kTitleTextStyle,
-                    ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    Column(
-                      children: [
-                        Form(
-                          key: AppKeys.keys0,
-                          child: Container(
-                            height: 41,
-                            width: 240,
-                            child: TextFormField(
-                              //initialValue: "+79033064659",
-                              controller: _loginController,
-                              validator: (str) {
-                                if (str.length < 18) {
-                                  return "Номер телефона слишком короткий";
-                                } else if (str[1] != '7') {
-                                  return "Введите номер с кодом +7";
-                                } else {
-                                  return null;
-                                }
-                              },
-                              inputFormatters: [maskFormatter],
-                              decoration: inputDecor("Номер телефона"),
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        Form(
-                          key: AppKeys.keys1,
-                          child: Container(
-                            height: 41,
-                            width: 240,
-                            child: TextFormField(
-                              //initialValue: "Google5656",
-                              controller: _passwordController,
-                              validator: (str) {
-                                if (str.length == 0) {
-                                  return "Пароль слишком короткий";
-                                } else {
-                                  return null;
-                                }
-                              },
-                              decoration: inputDecor("Пароль"),
-                              obscureText: true,
-                              obscuringCharacter: '*',
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        GestureDetector(
-                            onTap: () {
-                              authorisationBloc.pickState(UserToHelp());
+    double _statusBar = MediaQuery.of(context).padding.top;
+    Size _size = MediaQuery.of(context).size;
+    return SafeArea(
+      child: Scaffold(
+        body: WillPopScope(
+          onWillPop: () => authorisationBloc.pickState(UserUnAuth()),
+          child: SingleChildScrollView(
+            child: Container(
+              height: _size.height - _statusBar,
+              width: _size.width,
+              color: kBackGroundColor,
+              padding: EdgeInsets.fromLTRB(30, 90, 30, 60),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    "Вход",
+                    style: kTitleTextStyle,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Column(
+                    children: [
+                      Form(
+                        key: AppKeys.keys0,
+                        child: Container(
+                          height: 41,
+                          width: 240,
+                          child: TextFormField(
+                            //initialValue: "+79033064659",
+                            controller: _loginController,
+                            validator: (str) {
+                              if (str.length < 18) {
+                                return "Номер телефона слишком короткий";
+                              } else if (str[1] != '7') {
+                                return "Введите номер с кодом +7";
+                              } else {
+                                return null;
+                              }
                             },
-                            child: Text("Помощь",
-                                style: kHelpBottomTextStyleBlack)),
-                      ],
-                    ),
-                    Container(
-                      height: 41,
-                      width: 300,
-                      child: StreamBuilder(
-                        stream: authorisationBloc.subject.stream,
-                        builder: (ctx, AsyncSnapshot<UserResponse> snapshot) {
-                          if (snapshot.hasData) {
-                            if (snapshot.data is UserAuthFailed) {
-                              return Text("Номер телефона или пароль неверен",
-                                  style: kErrorTextStyle);
-                            }
-                          }
-                          return Text("");
-                        },
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: _submit,
-                      child: Container(
-                        height: 41,
-                        width: 240,
-                        decoration: kOrangeBoxDecorationOrangeBorder,
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            "Войти",
-                            style: kBottomTextStyleWhite,
+                            textAlign: TextAlign.center,
+                            textAlignVertical: TextAlignVertical.bottom,
+                            inputFormatters: [maskFormatter],
+                            decoration: inputDecor("Номер телефона"),
                           ),
                         ),
                       ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      Form(
+                        key: AppKeys.keys1,
+                        child: Container(
+                          height: 41,
+                          width: 240,
+                          child: TextFormField(
+                            //initialValue: "Google5656",
+                            controller: _passwordController,
+                            validator: (str) {
+                              if (str.length == 0) {
+                                return "Пароль слишком короткий";
+                              } else {
+                                return null;
+                              }
+                            },
+                            decoration: inputDecor("Пароль"),
+                            obscureText: true,
+                            obscuringCharacter: '*',
+                            textAlign: TextAlign.center,
+                            textAlignVertical: TextAlignVertical.bottom,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            authorisationBloc.pickState(UserToHelp());
+                          },
+                          child:
+                              Text("Помощь", style: kHelpBottomTextStyleBlack)),
+                    ],
+                  ),
+                  Container(
+                    height: 41,
+                    width: 300,
+                    child: StreamBuilder(
+                      stream: authorisationBloc.subject.stream,
+                      builder: (ctx, AsyncSnapshot<UserResponse> snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data is UserAuthFailed) {
+                            return Text("Номер телефона или пароль неверен",
+                                style: kErrorTextStyle);
+                          }
+                        }
+                        return Text("");
+                      },
                     ),
-                  ],
-                ),
+                  ),
+                  GestureDetector(
+                    onTap: _submit,
+                    child: Container(
+                      height: 41,
+                      width: 240,
+                      decoration: kOrangeBoxDecorationOrangeBorder,
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          "Войти",
+                          style: kBottomTextStyleWhite,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -168,7 +176,7 @@ InputDecoration inputDecor(String hintStr) {
         fontFamily: "roboto",
         fontSize: 18,
         color: Color(0xFF171717).withOpacity(0.5),
-        fontWeight: FontWeight.normal),
+        fontWeight: FontWeight.w400),
     enabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(6),
       borderSide: BorderSide(
