@@ -1,16 +1,13 @@
-# tigra
+Privacy Policy
 
-A new Flutter project.
+Built the Tigra v.0.1 app as a Free app. This service is provided by at no cost and is intended for use as is.
 
-## Getting Started
+Contact Us
 
-This project is a starting point for a Flutter application.
+If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me ramzil.galimov1@gmail.com
 
-A few resources to get you started if this is your first Flutter project:
+Политика конфиденциальности
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Термин “личная информация”, используемый в настоящем документе, определяется как любая информация, которая идентифицирует или может использоваться для идентификации, связи или поиска человека, к которому такая информация относится. Личная информация, которую мы собираем, будет являться предметом настоящей политики конфиденциальности, с вносимыми время от времени поправками. Мы не запрашиваем Ваш адрес электронной почты или какую нибудь информацию о Вас. Мы не продаем контент. Безопасность Вашей персональной информации не будет нарушена. Мы не просим информацию о местоположении через наше мобильное приложение. Мы не отправляем на электронную почту рассылку новостей.
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Контакты e-mail: ramzil.galimov1@gmail.com
