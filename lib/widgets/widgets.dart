@@ -272,7 +272,6 @@ Future showCustDialog(BuildContext context) {
                     onTap: () {
                       authorisationBloc.logOut();
                       Navigator.pop(context);
-                      Navigator.pop(context);
                     },
                     child: Container(
                       height: 46,

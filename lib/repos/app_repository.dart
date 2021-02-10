@@ -36,7 +36,7 @@ class AppRepository {
             "first_name": data["profile"]["first_name"],
             "last_name": data["profile"]["last_name"],
             "phone_number": data["profile"]["phone_number"],
-            "middle_name": data["profile"]["middle_name"],
+            "middle_name": data["profile"]["child_name"],
             "password": password,
             "visit_counter": data["profile"]["visit_counter"]
           });
@@ -85,7 +85,7 @@ class AppRepository {
                 "first_name": data["profile"]["first_name"],
                 "last_name": data["profile"]["last_name"],
                 "phone_number": data["profile"]["phone_number"],
-                "middle_name": data["profile"]["middle_name"],
+                "middle_name": data["profile"]["child_name"],
                 "password": password,
                 "visit_counter": data["profile"]["visit_counter"]
               });
@@ -205,7 +205,7 @@ class AppRepository {
                   'first_name': name,
                   'last_name': surname,
                   'password': password,
-                  'middle_name': middleName
+                  'child_name': middleName
                 }));
             print(response);
             if (response.statusCode != 200) {
