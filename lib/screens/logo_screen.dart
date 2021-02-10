@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:Tigra/main.dart';
 import 'package:Tigra/responses/user_response.dart';
 import 'package:Tigra/styles/theme.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 class LogoScreen extends StatefulWidget {
   @override
   _LogoScreenState createState() => _LogoScreenState();
@@ -21,8 +20,13 @@ class _LogoScreenState extends State<LogoScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Container(
+              //     height: 170, width: 250, child: SvgPicture.asset(assetName)),
               Container(
-                  height: 170, width: 250, child: SvgPicture.asset(assetName)),
+                  height: 170,
+                  width: 250,
+                  child: Image(image: Svg(assetName))),
+
               SizedBox(
                 height: 15,
               ),

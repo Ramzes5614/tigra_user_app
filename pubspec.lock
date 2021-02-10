@@ -140,12 +140,19 @@ packages:
     source: hosted
     version: "4.1.2+1"
   flutter_svg:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: flutter_svg
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.19.1"
+  flutter_svg_provider:
+    dependency: "direct main"
+    description:
+      name: flutter_svg_provider
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.1.8"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -351,7 +358,7 @@ packages:
       name: shared_preferences_windows
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.0.2+2"
+    version: "0.0.2+3"
   sky_engine:
     dependency: transitive
     description: flutter
@@ -419,7 +426,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.4"
+    version: "1.7.4+1"
   xdg_directories:
     dependency: transitive
     description:
