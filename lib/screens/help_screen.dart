@@ -56,10 +56,11 @@ class _HelpScreenState extends State<HelpScreen> {
                       child: Text("Восстановить пароль",
                           style: kHelperButtonTextStyle),
                       onTap: () {
-                        Navigator.push(
+                        /*Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => RecoveryScreen()));
+                                builder: (context) => RecoveryScreen()));*/
+                        authorisationBloc.pickState(UserToPassRec());
                       },
                     ),
                     SizedBox(

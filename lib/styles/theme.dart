@@ -38,7 +38,7 @@ const kBottomTextStyleOrange = TextStyle(
     fontFamily: "roboto",
     fontSize: 18,
     color: Color(0xFFFF8B20),
-    fontWeight: FontWeight.w700);
+    fontWeight: FontWeight.bold);
 const kBottomTextStyleWhite = TextStyle(
     fontFamily: "roboto",
     fontSize: 18,

@@ -36,14 +36,25 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   @override
   Widget build(BuildContext context) {
     Size _size = MediaQuery.of(context).size;
-    double _statusBar = MediaQuery.of(context).padding.top;
+    //double _statusBar = MediaQuery.of(context).padding.top;
     return SafeArea(
       child: WillPopScope(
         onWillPop: () => authorisationBloc.pickState(UserUnAuth()),
         child: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 50,
+            backgroundColor: kBoxBlackColor,
+            iconTheme: IconThemeData(color: kBottomColorWhite),
+            leading: GestureDetector(
+              child: Icon(Icons.arrow_back),
+              onTap: () {
+                authorisationBloc.pickState(UserToLogoScreen());
+              },
+            ),
+          ),
           body: SingleChildScrollView(
             child: Container(
-              height: _size.height - _statusBar,
+              height: _size.height - 82,
               width: _size.width,
               color: kBackGroundColor,
               padding: EdgeInsets.fromLTRB(30, 40, 30, 40),
@@ -60,7 +71,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         minFontSize: 20,
                       ),
                     ),
-                    SizedBox(height: 20),
+                    Spacer(
+                      flex: 1,
+                    ),
                     Container(
                       child: StreamBuilder(
                         stream: registrationBloc.subject,
@@ -88,8 +101,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
+                    Spacer(
+                      flex: 1,
                     ),
                     Container(
                       padding: EdgeInsets.all(8),
@@ -135,8 +148,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         },
                       ),
                     ),
-                    SizedBox(
-                      height: 10,
+                    Spacer(
+                      flex: 1,
                     ),
                     Container(
                       alignment: Alignment.bottomCenter,

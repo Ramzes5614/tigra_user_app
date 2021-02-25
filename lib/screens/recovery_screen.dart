@@ -1,3 +1,5 @@
+import 'package:Tigra/main.dart';
+import 'package:Tigra/responses/user_response.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:Tigra/blocs/recovary_bloc.dart';
@@ -41,10 +43,21 @@ class _RecoveryScreen extends State<RecoveryScreen> {
           return null;
         },
         child: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 50,
+            backgroundColor: kBoxBlackColor,
+            iconTheme: IconThemeData(color: kBottomColorWhite),
+            leading: GestureDetector(
+              child: Icon(Icons.arrow_back),
+              onTap: () {
+                authorisationBloc.pickState(UserToLogoScreen());
+              },
+            ),
+          ),
           body: SingleChildScrollView(
             child: Container(
               width: _size.width,
-              height: _size.height - _statusBar,
+              height: _size.height - 90,
               //alignment: Alignment.center,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,

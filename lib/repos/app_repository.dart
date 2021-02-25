@@ -282,21 +282,18 @@ class AppRepository {
   Future<int> updateUserState(String phoneNumber) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
-      /*String basicAuth = 'Basic ' +
-          base64.encode(utf8.encode("${user.userPhoneNumber}:${user.}"));
-      print(basicAuth);*/
       String _pNumber = convertToSimplePhoneNumber(phoneNumber);
       var response = await _dio.get(
-        "https://kids-project-pro.herokuapp.com/account/visits/$_pNumber",
+        "https://kids-project-pro.herokuapp.com/account/visits/$_pNumber/",
       );
       print(response.data);
       var jdata = jsonEncode(response.data);
       var data = jsonDecode(jdata);
       print(jdata);
       if (data != null) {
-        prefs.setInt("visits_counter", data["visits"]);
-        print("Вход осуществлен");
-        return data["visits"];
+        prefs.setInt("visits_counter", int.parse(data["visits"]));
+        print("Посещений получены");
+        return int.parse(data["visits"]);
       } else {
         return -1;
       }

@@ -1,4 +1,4 @@
-package com.tigra.tigra_app
+package com.example.tigra
 
 import io.flutter.embedding.android.FlutterActivity
 

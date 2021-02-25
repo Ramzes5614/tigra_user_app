@@ -66,3 +66,11 @@ class UserToQrScreen extends UserLoggedIn {
 class UserToHelp extends UserResponse {
   UserToHelp() : super(null);
 }
+
+class UserToLogoScreen extends UserResponse {
+  UserToLogoScreen() : super(null);
+}
+
+class UserToPassRec extends UserResponse {
+  UserToPassRec() : super(null);
+}

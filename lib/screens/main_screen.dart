@@ -1,3 +1,4 @@
+import 'package:Tigra/screens/recovery_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:Tigra/elements/loading_spinkit.dart';
 import 'package:Tigra/elements/transparent_loading.dart';
@@ -46,6 +47,8 @@ class _MainScreenState extends State<MainScreen> {
             return QrCodeScreen();
           } else if (snapshot.data is UserToHelp) {
             return HelpScreen();
+          } else if (snapshot.data is UserToPassRec) {
+            return RecoveryScreen();
           } else {
             return LogoScreen();
           }

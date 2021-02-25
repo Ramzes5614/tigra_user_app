@@ -30,130 +30,142 @@ class _AuthorisationScreenState extends State<AuthorisationScreen> {
         child: WillPopScope(
       onWillPop: () => authorisationBloc.pickState(UserUnAuth()),
       child: Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 50,
+            backgroundColor: kBoxBlackColor,
+            iconTheme: IconThemeData(color: kBottomColorWhite),
+            leading: GestureDetector(
+              child: Icon(Icons.arrow_back),
+              onTap: () {
+                authorisationBloc.pickState(UserToLogoScreen());
+              },
+            ),
+          ),
           body: SingleChildScrollView(
-        child: Container(
-          height: _size.height - _statusBar,
-          width: _size.width,
-          color: kBackGroundColor,
-          padding: EdgeInsets.fromLTRB(30, 90, 30, 60),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Container(
-                child: Text(
-                  "Вход",
-                  style: kTitleTextStyle,
-                ),
-              ),
-              Container(
-                child: SizedBox(
-                  height: 20,
-                ),
-              ),
-              Container(
-                child: Column(
-                  children: [
-                    Form(
-                      key: AppKeys.keys0,
-                      child: Container(
-                        height: 41,
-                        width: 240,
-                        child: TextFormField(
-                          //initialValue: "+79033064659",
-                          controller: _loginController,
-                          validator: (str) {
-                            if (str.length < 18) {
-                              return "Номер телефона слишком короткий";
-                            } else if (str[1] != '7') {
-                              return "Введите номер с кодом +7";
-                            } else {
-                              return null;
-                            }
-                          },
-                          textAlign: TextAlign.center,
-                          textAlignVertical: TextAlignVertical.bottom,
-                          inputFormatters: [maskFormatter],
-                          decoration: inputDecor("Номер телефона"),
+            child: Container(
+              height: _size.height - 80,
+              width: _size.width,
+              color: kBackGroundColor,
+              padding: EdgeInsets.fromLTRB(30, 90, 30, 60),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Container(
+                    child: Text(
+                      "Вход",
+                      style: kTitleTextStyle,
+                    ),
+                  ),
+                  Spacer(
+                    flex: 1,
+                  ),
+                  Container(
+                    child: Column(
+                      children: [
+                        Form(
+                          key: AppKeys.keys0,
+                          child: Container(
+                            height: 41,
+                            width: 240,
+                            child: TextFormField(
+                              //initialValue: "+79033064659",
+                              controller: _loginController,
+                              validator: (str) {
+                                if (str.length < 18) {
+                                  return "Номер телефона слишком короткий";
+                                } else if (str[1] != '7') {
+                                  return "Введите номер с кодом +7";
+                                } else {
+                                  return null;
+                                }
+                              },
+                              textAlign: TextAlign.center,
+                              textAlignVertical: TextAlignVertical.bottom,
+                              inputFormatters: [maskFormatter],
+                              decoration: inputDecor("Номер телефона"),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 15,
-                    ),
-                    Form(
-                      key: AppKeys.keys1,
-                      child: Container(
-                        height: 41,
-                        width: 240,
-                        child: TextFormField(
-                          //initialValue: "Google5656",
-                          controller: _passwordController,
-                          validator: (str) {
-                            if (str.length == 0) {
-                              return "Пароль слишком короткий";
-                            } else {
-                              return null;
-                            }
-                          },
-                          decoration: inputDecor("Пароль"),
-                          obscureText: true,
-                          obscuringCharacter: '*',
-                          textAlign: TextAlign.center,
-                          textAlignVertical: TextAlignVertical.bottom,
+                        SizedBox(
+                          height: 15,
                         ),
-                      ),
+                        Form(
+                          key: AppKeys.keys1,
+                          child: Container(
+                            height: 41,
+                            width: 240,
+                            child: TextFormField(
+                              //initialValue: "Google5656",
+                              controller: _passwordController,
+                              validator: (str) {
+                                if (str.length == 0) {
+                                  return "Пароль слишком короткий";
+                                } else {
+                                  return null;
+                                }
+                              },
+                              decoration: inputDecor("Пароль"),
+                              obscureText: true,
+                              obscuringCharacter: '*',
+                              textAlign: TextAlign.center,
+                              textAlignVertical: TextAlignVertical.bottom,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        GestureDetector(
+                            onTap: () {
+                              authorisationBloc.pickState(UserToHelp());
+                            },
+                            child: Text("Помощь",
+                                style: kHelpBottomTextStyleBlack)),
+                      ],
                     ),
-                    SizedBox(
-                      height: 20,
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          authorisationBloc.pickState(UserToHelp());
-                        },
-                        child:
-                            Text("Помощь", style: kHelpBottomTextStyleBlack)),
-                  ],
-                ),
-              ),
-              Container(
-                height: 41,
-                width: 300,
-                child: StreamBuilder(
-                  stream: authorisationBloc.subject.stream,
-                  builder: (ctx, AsyncSnapshot<UserResponse> snapshot) {
-                    if (snapshot.hasData) {
-                      if (snapshot.data is UserAuthFailed) {
-                        return Text("Номер телефона или пароль неверен",
-                            style: kErrorTextStyle);
-                      }
-                    }
-                    return Text("");
-                  },
-                ),
-              ),
-              Container(
-                child: GestureDetector(
-                  onTap: _submit,
-                  child: Container(
+                  ),
+                  Container(
                     height: 41,
-                    width: 240,
-                    decoration: kOrangeBoxDecorationOrangeBorder,
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Войти",
-                        style: kBottomTextStyleWhite,
+                    width: 300,
+                    child: StreamBuilder(
+                      stream: authorisationBloc.subject.stream,
+                      builder: (ctx, AsyncSnapshot<UserResponse> snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data is UserAuthFailed) {
+                            return Text("Номер телефона или пароль неверен",
+                                style: kErrorTextStyle);
+                          }
+                        }
+                        return Text("");
+                      },
+                    ),
+                  ),
+                  Spacer(
+                    flex: 1,
+                  ),
+                  Container(
+                    child: GestureDetector(
+                      onTap: _submit,
+                      child: Container(
+                        height: 41,
+                        width: 240,
+                        decoration: kOrangeBoxDecorationOrangeBorder,
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Войти",
+                            style: kBottomTextStyleWhite,
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
-          ),
-        ),
-      )),
+            ),
+          )),
     ));
   }
 

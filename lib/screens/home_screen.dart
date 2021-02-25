@@ -1,9 +1,10 @@
+import 'package:Tigra/main.dart';
+import 'package:Tigra/responses/user_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:Tigra/elements/methods.dart';
 import 'package:Tigra/models/user_model.dart';
-import 'package:Tigra/main.dart';
 import 'package:Tigra/screens/qr_code_screen.dart';
 import 'package:Tigra/styles/theme.dart';
 import 'package:Tigra/widgets/widgets.dart';
@@ -23,9 +24,9 @@ class _HomeSchreenState extends State<HomeSchreen> {
   @override
   Widget build(BuildContext context) {
     if (widget.user.visits == null) {
-      _visitsToFree = 4;
+      _visitsToFree = 5;
     } else {
-      _visitsToFree = 5 - (widget.user.visits % 5) - 1;
+      _visitsToFree = 5 - (widget.user.visits % 5);
     }
     Size _size = MediaQuery.of(context).size;
     double _statusBar = MediaQuery.of(context).padding.top;
@@ -114,21 +115,32 @@ class _HomeSchreenState extends State<HomeSchreen> {
                                 style: kPreVisitsTextStyle),
                           ),
                         ),
-                        Container(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              AutoSizeText(
-                                "${_visitsToFree + 1}",
-                                style: kVisitsNumberTextStyle,
-                                maxFontSize: 144,
-                              ),
-                              AutoSizeText(
-                                getVisitsCountString(_visitsToFree + 1),
-                                style: kAfterNumTextStyle,
-                              )
-                            ],
+                        GestureDetector(
+                          onTap: () {
+                            authorisationBloc.updateUserState(widget.user);
+                          },
+                          child: Container(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                AutoSizeText(
+                                  "$_visitsToFree",
+                                  style: kVisitsNumberTextStyle,
+                                  maxFontSize: 144,
+                                ),
+                                AutoSizeText(
+                                  getVisitsCountString(_visitsToFree),
+                                  style: kAfterNumTextStyle,
+                                ),
+                                AutoSizeText(
+                                  "(Нажмите, чтобы обновить)",
+                                  style: kAfterNumTextStyle,
+                                  maxFontSize: 10,
+                                  minFontSize: 8,
+                                )
+                              ],
+                            ),
                           ),
                         )
                       ],
@@ -138,13 +150,13 @@ class _HomeSchreenState extends State<HomeSchreen> {
                     ),
                     CircleVisits(widget.user.visits),
                     Column(
-                      mainAxisSize: MainAxisSize.min,
+                      //mainAxisSize: MainAxisSize.min,
                       children: [
                         Container(
                             alignment: Alignment.center,
                             height: 41,
                             width: 300,
-                            child: _visitsToFree == 0
+                            child: _visitsToFree == 1
                                 ? AutoSizeText(
                                     "Бесплатное посещение!",
                                     style: kVisitsTextStyle,

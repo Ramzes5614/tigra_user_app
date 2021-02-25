@@ -65,6 +65,7 @@ class _QrCodeScreenState extends State<QrCodeScreen> {
                               child: GestureDetector(
                                 onTap: () {
                                   Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
                                 },
                                 child: Container(
                                   height: 46,
