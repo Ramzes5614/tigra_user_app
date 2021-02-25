@@ -29,7 +29,7 @@ class _HomeSchreenState extends State<HomeSchreen> {
       _visitsToFree = 5 - (widget.user.visits % 5);
     }
     Size _size = MediaQuery.of(context).size;
-    double _statusBar = MediaQuery.of(context).padding.top;
+    //double _statusBar = MediaQuery.of(context).padding.top;
     return SafeArea(
       child: WillPopScope(
         onWillPop: () => showCustDialog(context),
@@ -67,42 +67,47 @@ class _HomeSchreenState extends State<HomeSchreen> {
             body: SingleChildScrollView(
               //padding: EdgeInsets.fromLTRB(30, 60, 30, 50),
               child: Container(
-                height: _size.height - _statusBar - 56,
+                height: _size.height * 0.89,
                 width: _size.width,
                 padding: EdgeInsets.fromLTRB(30, 60, 30, 50),
                 child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       //crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
-                            AutoSizeText(
-                              "${widget.user.name}",
-                              style: kNameTextStyle,
-                            ),
-                            AutoSizeText(
-                              "${widget.user.surname}",
-                              style: kSurnameTextStyle,
-                            ),
-                            AutoSizeText(
-                              "${widget.user.middlename}",
-                              style: kKidNameTextStyle,
-                            ),
-                            SizedBox(
-                              height: 20,
-                            ),
-                            AutoSizeText(
-                              "${convertFromSimplePhoneNumber(widget.user.userPhoneNumber)}",
-                              style: kSurnameTextStyle,
-                            )
-                          ],
+                        ConstrainedBox(
+                          constraints:
+                              BoxConstraints(maxHeight: 130, minHeight: 100),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              AutoSizeText(
+                                "${widget.user.name}",
+                                style: kNameTextStyle,
+                              ),
+                              AutoSizeText(
+                                "${widget.user.surname}",
+                                style: kSurnameTextStyle,
+                              ),
+                              AutoSizeText(
+                                "${widget.user.middlename}",
+                                style: kKidNameTextStyle,
+                              ),
+                              Spacer(),
+                              AutoSizeText(
+                                "${convertFromSimplePhoneNumber(widget.user.userPhoneNumber)}",
+                                style: kSurnameTextStyle,
+                              )
+                            ],
+                          ),
                         ),
                       ],
+                    ),
+                    Spacer(
+                      flex: 2,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -145,10 +150,13 @@ class _HomeSchreenState extends State<HomeSchreen> {
                         )
                       ],
                     ),
-                    SizedBox(
-                      height: 15,
+                    Spacer(
+                      flex: 2,
                     ),
                     CircleVisits(widget.user.visits),
+                    Spacer(
+                      flex: 1,
+                    ),
                     Column(
                       //mainAxisSize: MainAxisSize.min,
                       children: [

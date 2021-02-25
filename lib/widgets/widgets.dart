@@ -19,23 +19,16 @@ class MainAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          color: Colors.black,
-          child: AppBar(
-            automaticallyImplyLeading: false,
-            backgroundColor: themeLight.appBarTheme.color,
-            title: text,
-            titleSpacing: 30,
-            actions: [
-              Padding(
-                padding: EdgeInsets.all(5),
-                child: button,
-              )
-            ],
-          ),
-        ),
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: kBoxBlackColor,
+      title: text,
+      titleSpacing: 30,
+      actions: [
+        Padding(
+          padding: EdgeInsets.all(5),
+          child: button,
+        )
       ],
     );
   }
